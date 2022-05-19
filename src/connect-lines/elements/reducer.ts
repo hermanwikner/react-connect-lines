@@ -13,9 +13,15 @@ export function connectElementsReducer(
   if (type === 'add') {
     if (!element || !id) return state
 
-    // If the element exists in the state – update that element
+    if (!exists) {
+      return {
+        ...state,
+        elements: [...state.elements, {id, element, color, connectWith: connectWith || []}],
+      }
+    }
+
     if (exists) {
-      const update = state.elements.map((el) => {
+      const next = [...state.elements].map((el) => {
         if (el.id === id) {
           return {id, element, color, connectWith: connectWith || []}
         }
@@ -23,13 +29,10 @@ export function connectElementsReducer(
         return el
       })
 
-      return {...state, elements: update}
+      return {...state, elements: next}
     }
 
-    return {
-      ...state,
-      elements: [...state.elements, {id, element, color, connectWith: connectWith || []}],
-    }
+    return state
   }
 
   if (type === 'remove') {

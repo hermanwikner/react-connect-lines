@@ -1,4 +1,4 @@
-import React, {cloneElement, useCallback, useEffect, useMemo} from 'react'
+import React, {cloneElement, useCallback, useEffect, useMemo, useRef, useState} from 'react'
 import {ConnectElement, useConnectElements} from './elements'
 
 interface ConnectProps extends Omit<ConnectElement, 'element'> {
@@ -8,33 +8,76 @@ interface ConnectProps extends Omit<ConnectElement, 'element'> {
 export function Connect(props: ConnectProps) {
   const {children, id} = props
   const {addElement, removeElement} = useConnectElements()
+  const [el, setEl] = useState<HTMLElement | null>(null)
+  const [pressed, setPressed] = useState<boolean>(false)
+  const addedRef = useRef<boolean>(false)
 
   const add = useCallback(
     (node) => {
-      addElement({
-        ...props,
-        element: node,
-      })
+      if (addedRef.current === false) {
+        setEl(node)
+
+        addElement({
+          ...props,
+          id,
+          element: node,
+        })
+
+        addedRef.current = true
+      }
     },
-    [addElement, props]
+    [addElement, id, props]
   )
 
-  const clone = useMemo(
-    () =>
-      cloneElement(props.children, {
-        ...props.children.props,
-        ref: (node: any) => {
-          const _ref = (children as any).ref
+  const handleUpdate = useCallback(() => {
+    addElement({
+      ...props,
+      id,
+      element: el,
+    })
+  }, [addElement, el, id, props])
 
-          add(node)
+  const clone = useMemo(() => {
+    const {props: childProps} = children
 
-          if (typeof _ref === 'function') {
-            _ref(node)
-          }
-        },
-      }),
-    [add, children, props.children]
-  )
+    return cloneElement(children, {
+      ...childProps,
+      ref: (node: any) => {
+        const _ref = (children as any).ref
+
+        add(node)
+
+        if (typeof children === 'function') {
+          _ref(node)
+        }
+      },
+
+      // Drag support
+      onMouseMove: () => {
+        if (pressed) {
+          handleUpdate()
+        }
+
+        if (typeof childProps.onMouseUp === 'function') {
+          childProps.onMouseUp()
+        }
+      },
+      onMouseDown: () => {
+        setPressed(true)
+
+        if (typeof childProps.onMouseDown === 'function') {
+          childProps.onMouseDown()
+        }
+      },
+      onMouseUp: () => {
+        setPressed(false)
+
+        if (typeof childProps.onMouseUp === 'function') {
+          childProps.onMouseUp()
+        }
+      },
+    })
+  }, [add, children, handleUpdate, pressed])
 
   useEffect(() => {
     return () => {
