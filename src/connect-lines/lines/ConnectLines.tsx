@@ -1,6 +1,12 @@
 import { useConnectElements } from "../elements";
 import styled from "styled-components";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 const Svg = styled.svg`
   position: fixed;
@@ -13,12 +19,13 @@ const Svg = styled.svg`
 `;
 
 const DEFAULT_COLOR = "magenta";
+const OFFSET = 7;
 
 export function ConnectLines() {
   const [pointsData, setPointsData] = useState<any>([]);
   const { elements } = useConnectElements();
 
-  const raf = useRef<any>();
+  const raf = useRef<number>();
 
   const colors = useMemo(
     () => [...new Set([...elements.map((e) => e.color), DEFAULT_COLOR])],
@@ -70,10 +77,10 @@ export function ConnectLines() {
 
             const { right, left, bottom, top, width, height } = to;
 
-            const toRight = `${right} ${top + height / 2}`;
-            const toLeft = `${left} ${top + height / 2}`;
-            const toBottom = `${left + width / 2} ${bottom}`;
-            const toTop = `${left + width / 2} ${top}`;
+            const toRight = `${right + OFFSET} ${top + height / 2}`;
+            const toLeft = `${left - OFFSET} ${top + height / 2}`;
+            const toBottom = `${left + width / 2} ${bottom + OFFSET}`;
+            const toTop = `${left + width / 2} ${top - OFFSET}`;
 
             const measure = () => {
               if (from.left > to.right) {
@@ -131,7 +138,7 @@ export function ConnectLines() {
 
   return (
     <Svg>
-      {colors.map((c) => (
+      {colors?.map((c) => (
         <defs key={c}>
           <marker
             id={`triangle-${c}`}
@@ -148,7 +155,7 @@ export function ConnectLines() {
         </defs>
       ))}
 
-      {pointsData.map((p: { d: string; color: string }, index: number) => (
+      {pointsData?.map((p: { d: string; color: string }, index: number) => (
         <path
           key={index}
           data-index={index}
