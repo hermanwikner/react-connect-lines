@@ -1,6 +1,6 @@
 interface GetPathDataProps {
-  from: DOMRectReadOnly
-  to: DOMRectReadOnly
+  from?: DOMRectReadOnly
+  to?: DOMRectReadOnly
 }
 
 const OFFSET = 7
@@ -8,8 +8,12 @@ const OFFSET = 7
 export function getPathData(props: GetPathDataProps) {
   const {from, to} = props
 
+  if (!from || !to) return
+
+  let tmp
+
   if (from.left > to.right) {
-    return [
+    tmp = [
       {
         x: from?.left,
         y: from?.top + from.height / 2,
@@ -22,7 +26,7 @@ export function getPathData(props: GetPathDataProps) {
   }
 
   if (from.right < to.left) {
-    return [
+    tmp = [
       {
         x: from?.right,
         y: from?.top + from.height / 2,
@@ -35,7 +39,7 @@ export function getPathData(props: GetPathDataProps) {
   }
 
   if (from.bottom < to.top) {
-    return [
+    tmp = [
       {
         x: from?.left + from.width / 2,
         y: from?.bottom,
@@ -48,7 +52,7 @@ export function getPathData(props: GetPathDataProps) {
   }
 
   if (from.top > to.bottom) {
-    return [
+    tmp = [
       {
         x: from?.left + from.width / 2,
         y: from?.top,
@@ -58,6 +62,10 @@ export function getPathData(props: GetPathDataProps) {
         y: to.bottom - OFFSET,
       },
     ]
+  }
+
+  if (tmp) {
+    return `M ${tmp.map((p) => `${p.x} ${p.y}`).join(' ')}`
   }
 
   return undefined

@@ -1,6 +1,7 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
 import styled from 'styled-components'
 import {useConnectElements} from '../elements'
+import {getGroupedConnections} from './getGroupedConnections'
 import {getPathData} from './getPathData'
 
 const Svg = styled.svg`
@@ -16,8 +17,10 @@ const Svg = styled.svg`
 const DEFAULT_COLOR = 'magenta'
 const EMPTY_ARRAY: [] = []
 
+type PointsData = {d: string; color: string} | undefined
+
 export function ConnectLines() {
-  const [pointsData, setPointsData] = useState<any>(EMPTY_ARRAY)
+  const [pointsData, setPointsData] = useState<PointsData[]>(EMPTY_ARRAY)
   const {elements} = useConnectElements()
 
   const raf = useRef<number>()
@@ -33,40 +36,20 @@ export function ConnectLines() {
     }
 
     raf.current = window.requestAnimationFrame(() => {
-      const connectData = elements
-        .filter((e) => (e.connectWith || EMPTY_ARRAY).length > 0)
-        .map((el) => {
-          const {connectWith, element, color} = el
+      // Group connections
+      const groupedConnections = getGroupedConnections({elements})
 
-          const connectEls = elements
-            .filter((c) => connectWith?.includes(c.id))
-            .map((a) => a.element)
-
-          if (connectEls.length === 0) return
-
-          const boundingRects = connectEls.map((x) => x?.getBoundingClientRect())
-
-          return {
-            from: element?.getBoundingClientRect(),
-            to: boundingRects,
-            color: color,
-          }
-        })
-        .filter(Boolean)
-
-      const points = connectData
+      const points = groupedConnections
         .map((data) => {
           const {from, to: toArray, color} = data || {}
 
           const pathDataArr = toArray?.map((to) => {
-            if (!to || !from) return
-
             const pathData = getPathData({from, to})
 
             if (!pathData) return
 
             return {
-              d: `M ${pathData.map((p) => `${p.x} ${p.y}`).join(' ')}`,
+              d: pathData,
               color: color || DEFAULT_COLOR,
             }
           })
@@ -74,8 +57,11 @@ export function ConnectLines() {
           return pathDataArr
         })
         .filter(Boolean)
+        .flat()
 
-      setPointsData(points.flat().filter((p) => Boolean(p)))
+      const data = points.filter((p) => Boolean(p))
+
+      setPointsData(data)
     })
   }, [elements])
 
@@ -93,7 +79,7 @@ export function ConnectLines() {
     }
   }, [handleCalcLines])
 
-  if (!pointsData) return null
+  if ((pointsData || EMPTY_ARRAY).length === 0) return null
 
   return (
     <Svg>
@@ -101,30 +87,31 @@ export function ConnectLines() {
         <defs key={c}>
           <marker
             id={`triangle-${c}`}
-            viewBox="0 0 10 10"
-            refX="1"
-            refY="5"
+            markerHeight="5"
             markerUnits="strokeWidth"
             markerWidth="5"
-            markerHeight="5"
             orient="auto"
+            refX="1"
+            refY="5"
+            viewBox="0 0 10 10"
           >
             <path d="M 0 0 L 10 5 L 0 10 z" fill={c} />
           </marker>
         </defs>
       ))}
 
-      {pointsData?.map((p: {d: string; color: string}, index: number) => (
-        <path
-          key={index}
-          data-index={index}
-          d={p?.d}
-          fill="none"
-          strokeWidth="2"
-          stroke={p?.color}
-          markerEnd={`url(#triangle-${p.color})`}
-        />
-      ))}
+      {pointsData?.map((p) => {
+        return (
+          <path
+            d={p?.d}
+            fill="none"
+            key={p?.d}
+            markerEnd={`url(#triangle-${p?.color})`}
+            stroke={p?.color}
+            strokeWidth="2"
+          />
+        )
+      })}
     </Svg>
   )
 }
