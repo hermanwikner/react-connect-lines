@@ -1,12 +1,7 @@
-import { useConnectElements } from "../elements";
-import styled from "styled-components";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import styled from 'styled-components'
+import {useConnectElements} from '../elements'
+import {getPathData} from './getPathData'
 
 const Svg = styled.svg`
   position: fixed;
@@ -16,125 +11,89 @@ const Svg = styled.svg`
   pointer-events: none;
   width: 100%;
   height: 100%;
-`;
+`
 
-const DEFAULT_COLOR = "magenta";
-const OFFSET = 7;
+const DEFAULT_COLOR = 'magenta'
+const EMPTY_ARRAY: [] = []
 
 export function ConnectLines() {
-  const [pointsData, setPointsData] = useState<any>([]);
-  const { elements } = useConnectElements();
+  const [pointsData, setPointsData] = useState<any>(EMPTY_ARRAY)
+  const {elements} = useConnectElements()
 
-  const raf = useRef<number>();
+  const raf = useRef<number>()
 
   const colors = useMemo(
-    () => [...new Set([...elements.map((e) => e.color), DEFAULT_COLOR])],
+    () => [...new Set([...elements.map((e) => e.color), DEFAULT_COLOR])].filter(Boolean),
     [elements]
-  );
+  )
 
   const handleCalcLines = useCallback(() => {
     if (raf.current) {
-      window.cancelAnimationFrame(raf.current);
+      window.cancelAnimationFrame(raf.current)
     }
 
     raf.current = window.requestAnimationFrame(() => {
       const connectData = elements
-        .filter((e) => e.connectWith)
+        .filter((e) => (e.connectWith || EMPTY_ARRAY).length > 0)
         .map((el) => {
-          const { connectWith, element, color } = el;
+          const {connectWith, element, color} = el
 
           const connectEls = elements
             .filter((c) => connectWith?.includes(c.id))
-            .map((a) => a.element);
+            .map((a) => a.element)
 
-          if (connectEls.length === 0) return;
+          if (connectEls.length === 0) return
 
-          const boundingRects = connectEls.map((x) =>
-            x?.getBoundingClientRect()
-          );
+          const boundingRects = connectEls.map((x) => x?.getBoundingClientRect())
 
           return {
             from: element?.getBoundingClientRect(),
             to: boundingRects,
             color: color,
-          };
+          }
         })
-        .filter(Boolean);
+        .filter(Boolean)
 
       const points = connectData
         .map((data) => {
-          const { from, to: toArray, color } = data || {};
+          const {from, to: toArray, color} = data || {}
 
-          if (!from || !toArray) return;
+          const pathDataArr = toArray?.map((to) => {
+            if (!to || !from) return
 
-          const fromRight = `${from?.right} ${from?.top + from.height / 2}`;
-          const fromLeft = `${from?.left} ${from?.top + from.height / 2}`;
-          const fromBottom = `${from?.left + from.width / 2} ${from?.bottom}`;
-          const fromTop = `${from?.left + from.width / 2} ${from?.top}`;
+            const pathData = getPathData({from, to})
 
-          const toL = toArray.map((to) => {
-            if (!to) return;
-
-            const { right, left, bottom, top, width, height } = to;
-
-            const toRight = `${right + OFFSET} ${top + height / 2}`;
-            const toLeft = `${left - OFFSET} ${top + height / 2}`;
-            const toBottom = `${left + width / 2} ${bottom + OFFSET}`;
-            const toTop = `${left + width / 2} ${top - OFFSET}`;
-
-            const measure = () => {
-              if (from.left > to.right) {
-                return `${fromLeft} ${toRight}`;
-              }
-
-              if (from.right < to.left) {
-                return `${fromRight} ${toLeft}`;
-              }
-
-              if (from.bottom < to.top) {
-                return `${fromBottom} ${toTop}`;
-              }
-
-              if (from.top > to.bottom) {
-                return `${fromTop} ${toBottom}`;
-              }
-
-              return `${fromTop} ${toBottom}`;
-            };
-
-            const d = measure();
-
-            if (!d) return;
+            if (!pathData) return
 
             return {
-              d: `M ${d}`,
+              d: `M ${pathData.map((p) => `${p.x} ${p.y}`).join(' ')}`,
               color: color || DEFAULT_COLOR,
-            };
-          });
+            }
+          })
 
-          return toL;
+          return pathDataArr
         })
-        .filter(Boolean);
+        .filter(Boolean)
 
-      setPointsData(points.flat());
-    });
-  }, [raf.current]);
-
-  useEffect(() => {
-    handleCalcLines();
-  }, [elements]);
+      setPointsData(points.flat().filter((p) => Boolean(p)))
+    })
+  }, [elements])
 
   useEffect(() => {
-    window.addEventListener("resize", handleCalcLines, { passive: true });
-    window.addEventListener("scroll", handleCalcLines, { passive: true });
+    handleCalcLines()
+  }, [elements, handleCalcLines])
+
+  useEffect(() => {
+    window.addEventListener('resize', handleCalcLines, {passive: true})
+    window.addEventListener('scroll', handleCalcLines, {passive: true})
 
     return () => {
-      window.removeEventListener("resize", handleCalcLines);
-      window.removeEventListener("scroll", handleCalcLines);
-    };
-  }, [handleCalcLines]);
+      window.removeEventListener('resize', handleCalcLines)
+      window.removeEventListener('scroll', handleCalcLines)
+    }
+  }, [handleCalcLines])
 
-  if (!pointsData) return null;
+  if (!pointsData) return null
 
   return (
     <Svg>
@@ -155,7 +114,7 @@ export function ConnectLines() {
         </defs>
       ))}
 
-      {pointsData?.map((p: { d: string; color: string }, index: number) => (
+      {pointsData?.map((p: {d: string; color: string}, index: number) => (
         <path
           key={index}
           data-index={index}
@@ -167,5 +126,5 @@ export function ConnectLines() {
         />
       ))}
     </Svg>
-  );
+  )
 }

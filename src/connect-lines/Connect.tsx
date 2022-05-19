@@ -12,19 +12,17 @@ export function Connect(props: ConnectProps) {
   const add = useCallback(
     (node) => {
       addElement({
-        id: id,
+        ...props,
         element: node,
-        connectWith: connectWith,
-        color: color,
       });
     },
-    [id, connectWith, color]
+    [props]
   );
 
   const clone = useMemo(
     () =>
-      cloneElement(children, {
-        ...children.props,
+      cloneElement(props.children, {
+        ...props.children.props,
         ref: (node: any) => {
           const _ref = (children as any).ref;
 
@@ -35,7 +33,7 @@ export function Connect(props: ConnectProps) {
           }
         },
       }),
-    [children, id, connectWith]
+    [props]
   );
 
   useEffect(() => {

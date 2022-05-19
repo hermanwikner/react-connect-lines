@@ -1,35 +1,36 @@
-import { useCallback, useMemo, useReducer } from "react";
-import { ConnectElement, ConnectElementsContext } from "./context";
-import { connectElementsReducer } from "./reducer";
+import {useCallback, useMemo, useReducer} from 'react'
+import {ConnectLines} from '../lines'
+import {ConnectElement, ConnectElementsContext} from './context'
+import {connectElementsReducer} from './reducer'
 
 interface ConnectElementsProviderProps {
-  children: any;
+  children: React.ReactNode
 }
 
 export function ConnectElementsProvider(props: ConnectElementsProviderProps) {
-  const { children } = props;
+  const {children} = props
   const [state, dispatch] = useReducer(connectElementsReducer, {
     elements: [],
     addElement: () => null,
     removeElement: () => null,
-  });
+  })
 
-  const handleAdd = useCallback((props: ConnectElement) => {
+  const handleAdd = useCallback((addProps: ConnectElement) => {
     dispatch({
-      type: "add",
-      element: props.element,
-      id: props.id,
-      connectWith: props.connectWith,
-      color: props.color,
-    });
-  }, []);
+      type: 'add',
+      element: addProps.element,
+      id: addProps.id,
+      connectWith: addProps.connectWith,
+      color: addProps.color,
+    })
+  }, [])
 
   const handleRemove = useCallback((id: string) => {
     dispatch({
-      type: "remove",
+      type: 'remove',
       id: id,
-    });
-  }, []);
+    })
+  }, [])
 
   const ctxVal = useMemo(
     () => ({
@@ -37,12 +38,13 @@ export function ConnectElementsProvider(props: ConnectElementsProviderProps) {
       addElement: handleAdd,
       removeElement: handleRemove,
     }),
-    [state.elements]
-  );
+    [handleAdd, handleRemove, state.elements]
+  )
 
   return (
     <ConnectElementsContext.Provider value={ctxVal}>
       {children}
+      <ConnectLines />
     </ConnectElementsContext.Provider>
-  );
+  )
 }
