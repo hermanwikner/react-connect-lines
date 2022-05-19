@@ -1,13 +1,16 @@
 import {Card, Container, Grid} from '@sanity/ui'
+import {useState} from 'react'
 import {Connect} from './connect-lines'
 
 export default function App() {
+  const [color, setColor] = useState<string>('red')
+
   return (
     <Card height="fill">
       <Container padding={6} sizing="border">
         <Grid columns={2} gap={8}>
-          <Connect id="card-1" connectWith={['card-2', 'card-4']} color="orange">
-            <Card padding={6} border tone="primary">
+          <Connect id="card-1" connectWith={['card-2', 'card-4']} color={color}>
+            <Card padding={6} border tone="primary" onClick={() => setColor('blue')}>
               Card 1
             </Card>
           </Connect>

@@ -59,7 +59,7 @@ export function getPathData(props: GetPathDataProps) {
       },
       {
         x: to.left + to.width / 2,
-        y: to.bottom - OFFSET,
+        y: to.bottom + OFFSET,
       },
     ]
   }

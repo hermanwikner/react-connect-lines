@@ -11,7 +11,20 @@ export function connectElementsReducer(
   const exists = state?.elements?.some((l) => l.id === id)
 
   if (type === 'add') {
-    if (exists || !element || !id) return state
+    if (!element || !id) return state
+
+    // If the element exists in the state – update that element
+    if (exists) {
+      const update = state.elements.map((el) => {
+        if (el.id === id) {
+          return {id, element, color, connectWith: connectWith || []}
+        }
+
+        return el
+      })
+
+      return {...state, elements: update}
+    }
 
     return {
       ...state,

@@ -1,46 +1,46 @@
-import React, { cloneElement, useCallback, useEffect, useMemo } from "react";
-import { ConnectElement, useConnectElements } from "./elements";
+import React, {cloneElement, useCallback, useEffect, useMemo} from 'react'
+import {ConnectElement, useConnectElements} from './elements'
 
-interface ConnectProps extends Omit<ConnectElement, "element"> {
-  children: React.ReactElement;
+interface ConnectProps extends Omit<ConnectElement, 'element'> {
+  children: React.ReactElement
 }
 
 export function Connect(props: ConnectProps) {
-  const { children, connectWith, id, color } = props;
-  const { addElement, removeElement } = useConnectElements();
+  const {children, id} = props
+  const {addElement, removeElement} = useConnectElements()
 
   const add = useCallback(
     (node) => {
       addElement({
         ...props,
         element: node,
-      });
+      })
     },
-    [props]
-  );
+    [addElement, props]
+  )
 
   const clone = useMemo(
     () =>
       cloneElement(props.children, {
         ...props.children.props,
         ref: (node: any) => {
-          const _ref = (children as any).ref;
+          const _ref = (children as any).ref
 
-          add(node);
+          add(node)
 
-          if (typeof _ref === "function") {
-            _ref(node);
+          if (typeof _ref === 'function') {
+            _ref(node)
           }
         },
       }),
-    [props]
-  );
+    [add, children, props.children]
+  )
 
   useEffect(() => {
     return () => {
-      removeElement(id);
-    };
-  }, [id]);
+      removeElement(id)
+    }
+  }, [id, removeElement])
 
-  return clone;
+  return clone
 }
