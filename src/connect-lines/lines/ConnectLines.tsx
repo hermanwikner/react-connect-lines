@@ -67,7 +67,7 @@ export function ConnectLines() {
 
   useEffect(() => {
     handleCalcLines()
-  }, [elements, handleCalcLines])
+  }, [handleCalcLines])
 
   useEffect(() => {
     window.addEventListener('resize', handleCalcLines, {passive: true})
