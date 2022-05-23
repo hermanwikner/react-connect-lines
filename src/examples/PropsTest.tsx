@@ -1,4 +1,4 @@
-import {AddIcon} from '@sanity/icons'
+import {AddIcon, TrashIcon} from '@sanity/icons'
 import {
   Card,
   CardProps,
@@ -153,9 +153,15 @@ export function PropsTest() {
               tone={c?.tone}
             >
               <Stack space={4}>
-                <Text weight="semibold" size={3}>
-                  {c.id}
-                </Text>
+                <Flex align="center">
+                  <Box flex={1}>
+                    <Text weight="semibold" size={3}>
+                      {c.id}
+                    </Text>
+
+                    <Button icon={TrashIcon} mode="bleed" tone="critical" />
+                  </Box>
+                </Flex>
 
                 <Stack space={3}>
                   <Stack space={2}>

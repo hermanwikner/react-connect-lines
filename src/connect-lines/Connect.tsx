@@ -96,6 +96,29 @@ export function Connect(props: ConnectProps) {
           childProps.onMouseUp()
         }
       },
+      onTouchMove: () => {
+        if (pressed) {
+          handleUpdate()
+        }
+
+        if (typeof childProps.onTouchMove === 'function') {
+          childProps.onTouchMove()
+        }
+      },
+      onTouchStart: () => {
+        setPressed(true)
+
+        if (typeof childProps.onTouchStart === 'function') {
+          childProps.onTouchStart()
+        }
+      },
+      onTouchEnd: () => {
+        setPressed(false)
+
+        if (typeof childProps.onTouchEnd === 'function') {
+          childProps.onTouchEnd()
+        }
+      },
     })
   }, [add, children, handleUpdate, pressed])
 
