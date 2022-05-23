@@ -1,3 +1,4 @@
+import {AddIcon} from '@sanity/icons'
 import {
   Card,
   CardProps,
@@ -10,9 +11,10 @@ import {
   studioTheme,
   Button,
   Box,
+  Radio,
 } from '@sanity/ui'
 import {motion} from 'framer-motion'
-import {useCallback, useState} from 'react'
+import React, {useCallback, useState} from 'react'
 import {Connect, ConnectElement} from '../connect-lines'
 
 const MotionCard = motion(Card)
@@ -52,7 +54,7 @@ const CONNECTIONS: ConnectionType[] = [
     connectWith: [],
     tone: 'caution',
     color: studioTheme.color.light.caution.card.selected.bg,
-    stroke: 'dashed',
+    stroke: 'solid',
     edge: 'bezier',
   },
 ]
@@ -68,7 +70,7 @@ export function PropsTest() {
         connectWith: [],
         tone: 'primary',
         color: studioTheme.color.light.primary.card.selected.bg,
-        stroke: 'dashed',
+        stroke: 'solid',
         edge: 'bezier',
       },
     ])
@@ -76,7 +78,7 @@ export function PropsTest() {
 
   const handleConnect = useCallback(
     (changeProps) => {
-      const {target, connectId, stroke} = changeProps
+      const {target, connectId} = changeProps
 
       const exists = (connections.find((c) => c.id === target)?.connectWith || []).includes(
         connectId
@@ -89,7 +91,6 @@ export function PropsTest() {
             connectWith: exists
               ? (c?.connectWith || []).filter((a) => a !== connectId)
               : [...(c.connectWith || []), connectId],
-            stroke,
           }
         }
 
@@ -122,32 +123,47 @@ export function PropsTest() {
   return (
     <Container padding={4} width={3} sizing="border">
       <Box marginBottom={4}>
-        <Button text="Add element" onClick={handleAddElement} />
+        <Button
+          text="Add element"
+          icon={AddIcon}
+          fontSize={1}
+          padding={2}
+          mode="ghost"
+          onClick={handleAddElement}
+        />
       </Box>
 
-      <Grid columns={2} gap={7}>
+      <Grid columns={[1, 2, 2, 3]} gap={8} padding={6} sizing="border">
         {connections.map((c) => (
           <Connect
-            id={c.id}
-            connectWith={c.connectWith}
             color={c.color}
-            stroke={c?.stroke}
+            connectWith={c.connectWith}
             edge={c?.edge}
+            id={c.id}
             key={c.id}
+            stroke={c?.stroke}
           >
-            <MotionCard border padding={3} radius={2} drag dragMomentum={false} tone={c?.tone}>
+            <MotionCard
+              border
+              drag
+              dragMomentum={false}
+              padding={3}
+              radius={3}
+              sizing="border"
+              tone={c?.tone}
+            >
               <Stack space={4}>
                 <Text weight="semibold" size={3}>
                   {c.id}
                 </Text>
 
-                <Stack space={2}>
+                <Stack space={3}>
                   <Stack space={2}>
                     <Text muted size={1} weight="semibold">
-                      Connect with
+                      Connected with
                     </Text>
 
-                    <Flex align="center" gap={3}>
+                    <Flex align="center" gap={3} wrap="wrap">
                       {connections
                         .filter((a) => a.id !== c.id)
                         .map((a) => (
@@ -174,13 +190,13 @@ export function PropsTest() {
                     <Flex align="center" gap={3}>
                       {VARIANTS.map((stroke) => (
                         <Flex align="center" key={stroke} gap={1}>
-                          <Checkbox
+                          <Radio
                             size={1}
                             checked={c?.stroke === stroke}
-                            name={stroke}
+                            name={`${c.id}-stroke`}
                             value={stroke}
-                            onChange={(e) =>
-                              handleUpdate({target: c.id, update: {stroke: e.currentTarget.value}})
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                              handleUpdate({target: c.id, update: {stroke: e.target.value}})
                             }
                           />
 
@@ -200,13 +216,13 @@ export function PropsTest() {
                     <Flex align="center" gap={3}>
                       {EDGES.map((edge) => (
                         <Flex align="center" key={edge} gap={1}>
-                          <Checkbox
+                          <Radio
                             size={1}
                             checked={c?.edge === edge}
-                            name={edge}
+                            name={`${c.id}-edge`}
                             value={edge}
-                            onChange={(e) =>
-                              handleUpdate({target: c.id, update: {edge: e.currentTarget.value}})
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                              handleUpdate({target: c.id, update: {edge: e.target.value}})
                             }
                           />
 
