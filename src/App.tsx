@@ -1,5 +1,5 @@
-import {PropsTest, StressTest, Testing} from './examples'
+import {PropsTest} from './examples'
 
 export default function App() {
-  return <Testing />
+  return <PropsTest />
 }

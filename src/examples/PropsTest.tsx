@@ -9,6 +9,7 @@ import {
   Text,
   studioTheme,
   Button,
+  Box,
 } from '@sanity/ui'
 import {motion} from 'framer-motion'
 import {useCallback, useState} from 'react'
@@ -24,15 +25,15 @@ const EDGES = ['bezier', 'step']
 const CONNECTIONS: ConnectionType[] = [
   {
     id: 'card-1',
-    connectWith: ['card-2'],
+    connectWith: [],
     tone: 'primary',
     color: studioTheme.color.light.primary.card.selected.bg,
-    stroke: 'dashed',
+    stroke: 'solid',
     edge: 'bezier',
   },
   {
     id: 'card-2',
-    connectWith: ['card-4'],
+    connectWith: [],
     tone: 'positive',
     color: studioTheme.color.light.positive.card.selected.bg,
     stroke: 'solid',
@@ -40,7 +41,7 @@ const CONNECTIONS: ConnectionType[] = [
   },
   {
     id: 'card-3',
-    connectWith: ['card-1'],
+    connectWith: [],
     tone: 'critical',
     color: studioTheme.color.light.critical.card.selected.bg,
     stroke: 'solid',
@@ -48,7 +49,7 @@ const CONNECTIONS: ConnectionType[] = [
   },
   {
     id: 'card-4',
-    connectWith: ['card-3'],
+    connectWith: [],
     tone: 'caution',
     color: studioTheme.color.light.caution.card.selected.bg,
     stroke: 'dashed',
@@ -120,9 +121,11 @@ export function PropsTest() {
 
   return (
     <Container padding={4} width={3} sizing="border">
-      <Button text="Add element" onClick={handleAddElement} />
+      <Box marginBottom={4}>
+        <Button text="Add element" onClick={handleAddElement} />
+      </Box>
 
-      <Grid columns={2} gap={8}>
+      <Grid columns={2} gap={7}>
         {connections.map((c) => (
           <Connect
             id={c.id}

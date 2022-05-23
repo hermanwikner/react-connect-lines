@@ -1,17 +1,17 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
-import { ConnectElementsProvider } from "./connect-lines";
-import { studioTheme, ThemeProvider } from "@sanity/ui";
+import {studioTheme, ThemeProvider} from '@sanity/ui'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import App from './App'
+import {ConnectProvider} from './connect-lines'
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={studioTheme}>
-      <ConnectElementsProvider>
+      <ConnectProvider>
         <App />
-      </ConnectElementsProvider>
+      </ConnectProvider>
     </ThemeProvider>
   </React.StrictMode>,
-  document.getElementById("root")
-);
+  document.getElementById('root')
+)

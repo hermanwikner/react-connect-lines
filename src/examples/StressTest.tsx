@@ -4,6 +4,17 @@ import {Connect} from '../connect-lines'
 
 const STRESS_DATA = [...Array(10).keys()]
 
+function getRandomColor() {
+  const letters = '0123456789ABCDEF'
+  let color = '#'
+
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)]
+  }
+
+  return color
+}
+
 const MotionCard = motion(Card)
 
 export function StressTest() {
@@ -16,27 +27,31 @@ export function StressTest() {
       </Flex>
 
       <Stack flex={1} space={4}>
-        {STRESS_DATA.map((d) => (
-          <Connect
-            key={d}
-            id={`test-${d}`}
-            connectWith={STRESS_DATA.filter((s) => s !== d).map((x) => `test-${x}`)}
-          >
-            <MotionCard
-              drag
-              dragMomentum={false}
-              padding={5}
-              sizing="border"
-              tone="caution"
-              border
-              animate={{
-                position: 'absolute',
-                left: Math.random() * window.innerWidth - 50,
-                top: Math.random() * window.innerHeight - 50,
-              }}
-            ></MotionCard>
-          </Connect>
-        ))}
+        {STRESS_DATA.map((d) => {
+          const color = getRandomColor()
+
+          return (
+            <Connect
+              key={d}
+              id={`test-${d}`}
+              connectWith={STRESS_DATA.filter((s) => s !== d).map((x) => `test-${x}`)}
+              color={color}
+            >
+              <MotionCard
+                drag
+                dragMomentum={false}
+                padding={4}
+                sizing="border"
+                animate={{
+                  backgroundColor: color,
+                  position: 'absolute',
+                  left: Math.random() * window.innerWidth - 50,
+                  top: Math.random() * window.innerHeight - 50,
+                }}
+              ></MotionCard>
+            </Connect>
+          )
+        })}
       </Stack>
     </Container>
   )

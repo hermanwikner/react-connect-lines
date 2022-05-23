@@ -1,5 +1,5 @@
 {
-  "name": "connect-lines",
+  "name": "react-connect-lines",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",

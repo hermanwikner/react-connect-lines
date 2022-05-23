@@ -28,6 +28,7 @@ export function Connect(props: ConnectProps) {
         addElement({
           ...props,
           edge: props?.edge || 'bezier',
+          stroke: props?.stroke || 'solid',
           element: node,
         })
 
@@ -41,6 +42,7 @@ export function Connect(props: ConnectProps) {
     addElement({
       ...props,
       edge: props?.edge || 'bezier',
+      stroke: props?.stroke || 'solid',
       element: el,
     })
   }, [addElement, el, props])
@@ -62,13 +64,11 @@ export function Connect(props: ConnectProps) {
 
     return cloneElement(children, {
       ...childProps,
-      ref: (node: any) => {
-        const _ref = (children as any).ref
-
+      ref: (node: React.RefObject<HTMLElement>) => {
         add(node)
 
         if (typeof children === 'function') {
-          _ref(node)
+          childProps.ref(node)
         }
       },
 

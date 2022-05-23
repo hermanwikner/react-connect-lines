@@ -1,5 +1,4 @@
 import {useCallback, useMemo, useReducer} from 'react'
-import {ConnectLines} from '../ConnectLines'
 import {ConnectElement, ConnectElementsContext} from './context'
 import {connectElementsReducer} from './reducer'
 
@@ -39,9 +38,6 @@ export function ConnectElementsProvider(props: ConnectElementsProviderProps) {
   )
 
   return (
-    <ConnectElementsContext.Provider value={ctxVal}>
-      {children}
-      <ConnectLines />
-    </ConnectElementsContext.Provider>
+    <ConnectElementsContext.Provider value={ctxVal}>{children}</ConnectElementsContext.Provider>
   )
 }

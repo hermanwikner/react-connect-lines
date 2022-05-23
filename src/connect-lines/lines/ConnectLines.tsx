@@ -1,5 +1,5 @@
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
-import {useConnectElements} from './elements'
+import {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react'
+import {useConnectElements} from '../elements'
 import {getGroupedConnections, getPathData, pathify} from './utils'
 
 const SVG_STYLE: React.CSSProperties = {
@@ -49,6 +49,8 @@ export function ConnectLines() {
 
             const path = pathify({paths: pathData, edge: data?.edge})
 
+            if (!/\d/.test(path)) return
+
             return {
               d: path,
               color: color || DEFAULT_COLOR,
@@ -68,7 +70,7 @@ export function ConnectLines() {
     })
   }, [elements])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     handleCalcLines()
   }, [handleCalcLines])
 
@@ -82,42 +84,43 @@ export function ConnectLines() {
     }
   }, [handleCalcLines])
 
-  if ((pointsData || EMPTY_ARRAY).length === 0) return null
+  return useMemo(
+    () => (
+      <svg style={SVG_STYLE}>
+        {colors?.map((c) => (
+          <defs key={c}>
+            <marker
+              id={`triangle-${c}`}
+              markerHeight="5"
+              markerUnits="strokeWidth"
+              markerWidth="5"
+              orient="auto"
+              refX="1"
+              refY="5"
+              viewBox="0 0 10 10"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" fill={c} />
+            </marker>
+          </defs>
+        ))}
 
-  return (
-    <svg style={SVG_STYLE}>
-      {colors?.map((c) => (
-        <defs key={c}>
-          <marker
-            id={`triangle-${c}`}
-            markerHeight="5"
-            markerUnits="strokeWidth"
-            markerWidth="5"
-            orient="auto"
-            refX="1"
-            refY="5"
-            viewBox="0 0 10 10"
-          >
-            <path d="M 0 0 L 10 5 L 0 10 z" fill={c} />
-          </marker>
-        </defs>
-      ))}
-
-      {pointsData?.map((p) => {
-        return (
-          <path
-            id="p1"
-            d={p?.d}
-            fill="none"
-            key={p?.d}
-            markerEnd={`url(#triangle-${p?.color})`}
-            stroke={p?.color}
-            strokeWidth="2"
-            strokeDasharray={p?.stroke === 'dashed' ? 4 : 0}
-            strokeLinejoin="round"
-          />
-        )
-      })}
-    </svg>
+        {pointsData?.map((p) => {
+          return (
+            <path
+              id="p1"
+              d={p?.d}
+              fill="none"
+              key={p?.d}
+              markerEnd={`url(#triangle-${p?.color})`}
+              stroke={p?.color}
+              strokeWidth="2"
+              strokeDasharray={p?.stroke === 'dashed' ? 4 : 0}
+              strokeLinejoin="round"
+            />
+          )
+        })}
+      </svg>
+    ),
+    [colors, pointsData]
   )
 }
