@@ -3,20 +3,22 @@ import {createContext} from 'react'
 export interface ConnectElement {
   color?: string
   connectWith?: string[]
-  element: HTMLElement | null | undefined
+  edge?: 'bezier' | 'step' | undefined
+  element?: HTMLElement | null
   id: string
   stroke?: 'solid' | 'dashed' | undefined
-  edge?: 'bezier' | 'step' | undefined
 }
+
+export type ConnectElementsReducerPayload = ConnectElement & {type: 'add' | 'remove'}
+
+export type ConnectElementsDispatch = React.Dispatch<ConnectElementsReducerPayload>
 
 export type ConnectElementsContextValue = {
   elements: ConnectElement[]
-  addElement: (element: ConnectElement) => void
-  removeElement: (id: string) => void
+  dispatch: ConnectElementsDispatch
 }
 
 export const ConnectElementsContext = createContext<ConnectElementsContextValue>({
   elements: [],
-  addElement: () => null,
-  removeElement: () => null,
+  dispatch: () => null,
 })

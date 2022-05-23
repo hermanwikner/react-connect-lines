@@ -19,65 +19,79 @@ import {Connect, ConnectElement} from '../connect-lines'
 
 const MotionCard = motion(Card)
 
+const randId = () => Math.random().toString(36).substring(2, 9)
+
 type ConnectionType = Omit<ConnectElement, 'element'> & Pick<CardProps, 'tone'>
 
 const VARIANTS = ['solid', 'dashed']
 const EDGES = ['bezier', 'step']
 
-const CONNECTIONS: ConnectionType[] = [
-  {
-    id: 'card-1',
-    connectWith: [],
-    tone: 'primary',
-    color: studioTheme.color.light.primary.card.selected.bg,
-    stroke: 'solid',
-    edge: 'bezier',
-  },
-  {
-    id: 'card-2',
-    connectWith: [],
-    tone: 'positive',
-    color: studioTheme.color.light.positive.card.selected.bg,
-    stroke: 'solid',
-    edge: 'bezier',
-  },
-  {
-    id: 'card-3',
-    connectWith: [],
-    tone: 'critical',
-    color: studioTheme.color.light.critical.card.selected.bg,
-    stroke: 'solid',
-    edge: 'bezier',
-  },
-  {
-    id: 'card-4',
-    connectWith: [],
-    tone: 'caution',
-    color: studioTheme.color.light.caution.card.selected.bg,
-    stroke: 'solid',
-    edge: 'bezier',
-  },
-]
+// const CONNECTIONS: ConnectionType[] = [
+//   {
+//     id: randId(),
+//     connectWith: [],
+//     tone: 'primary',
+//     color: studioTheme.color.light.primary.card.selected.bg,
+//     stroke: 'solid',
+//     edge: 'bezier',
+//   },
+//   {
+//     id: randId(),
+//     connectWith: [],
+//     tone: 'positive',
+//     color: studioTheme.color.light.positive.card.selected.bg,
+//     stroke: 'solid',
+//     edge: 'bezier',
+//   },
+//   {
+//     id: randId(),
+//     connectWith: [],
+//     tone: 'critical',
+//     color: studioTheme.color.light.critical.card.selected.bg,
+//     stroke: 'solid',
+//     edge: 'bezier',
+//   },
+//   {
+//     id: randId(),
+//     connectWith: [],
+//     tone: 'caution',
+//     color: studioTheme.color.light.caution.card.selected.bg,
+//     stroke: 'solid',
+//     edge: 'bezier',
+//   },
+// ]
 
 export function PropsTest() {
-  const [connections, setConnections] = useState<ConnectionType[]>(CONNECTIONS)
+  const [connections, setConnections] = useState<ConnectionType[]>([])
 
-  const handleAddElement = useCallback(() => {
+  const handleAdd = useCallback(() => {
     setConnections((prev) => [
       ...prev,
       {
-        id: `card-${prev.length + 1}`,
+        id: randId(),
         connectWith: [],
         tone: 'primary',
-        color: studioTheme.color.light.primary.card.selected.bg,
         stroke: 'solid',
         edge: 'bezier',
       },
     ])
   }, [])
 
+  const handleDelete = useCallback((id: string) => {
+    setConnections((prev) =>
+      prev
+        .map((x) => {
+          return {
+            ...x,
+            connectWith: x.connectWith?.filter((y) => y !== id),
+          }
+        })
+        .filter((el) => el.id !== id)
+    )
+  }, [])
+
   const handleConnect = useCallback(
-    (changeProps: any) => {
+    (changeProps: {target: string; connectId: string}) => {
       const {target, connectId} = changeProps
 
       const exists = (connections.find((c) => c.id === target)?.connectWith || []).includes(
@@ -129,7 +143,7 @@ export function PropsTest() {
           fontSize={1}
           padding={2}
           mode="ghost"
-          onClick={handleAddElement}
+          onClick={handleAdd}
         />
       </Box>
 
@@ -151,6 +165,7 @@ export function PropsTest() {
               radius={3}
               sizing="border"
               tone={c?.tone}
+              style={{position: 'absolute'}}
             >
               <Stack space={4}>
                 <Flex align="center">
@@ -158,9 +173,15 @@ export function PropsTest() {
                     <Text weight="semibold" size={3}>
                       {c.id}
                     </Text>
-
-                    <Button icon={TrashIcon} mode="bleed" tone="critical" />
                   </Box>
+
+                  <Button
+                    icon={TrashIcon}
+                    mode="bleed"
+                    tone="critical"
+                    fontSize={1}
+                    onClick={() => handleDelete(c.id)}
+                  />
                 </Flex>
 
                 <Stack space={3}>

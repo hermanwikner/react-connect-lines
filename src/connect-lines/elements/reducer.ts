@@ -1,10 +1,8 @@
-import {ConnectElement, ConnectElementsContextValue} from './context'
-
-type ActionTypes = 'add' | 'remove'
+import {ConnectElement, ConnectElementsContextValue, ConnectElementsReducerPayload} from './context'
 
 export function connectElementsReducer(
   state: ConnectElementsContextValue,
-  payload: ConnectElement & {type: ActionTypes}
+  payload: ConnectElementsReducerPayload
 ): ConnectElementsContextValue {
   const {type, id, element, connectWith, color, stroke, edge} = payload
 
@@ -38,7 +36,17 @@ export function connectElementsReducer(
   }
 
   if (type === 'remove') {
-    return {...state, elements: state.elements.filter((el) => el.id !== id)}
+    return {
+      ...state,
+      elements: state.elements
+        .map((x) => {
+          return {
+            ...x,
+            connectWith: x.connectWith?.filter((y) => y !== id),
+          }
+        })
+        .filter((el) => el.id !== id),
+    }
   }
 
   return state

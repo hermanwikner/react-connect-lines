@@ -21,7 +21,6 @@ type PointsData = {d: string; color: string; stroke: 'solid' | 'dashed' | undefi
 export function ConnectLines() {
   const [pointsData, setPointsData] = useState<PointsData[]>(EMPTY_ARRAY)
   const {elements} = useConnectElements()
-
   const raf = useRef<number>()
 
   const colors = useMemo(
@@ -35,7 +34,6 @@ export function ConnectLines() {
     }
 
     raf.current = window.requestAnimationFrame(() => {
-      // Group connections
       const groupedConnections = getGroupedConnections({elements})
 
       const points = groupedConnections
@@ -84,43 +82,40 @@ export function ConnectLines() {
     }
   }, [handleCalcLines])
 
-  return useMemo(
-    () => (
-      <svg style={SVG_STYLE}>
-        {colors?.map((c) => (
-          <defs key={c}>
-            <marker
-              id={`triangle-${c}`}
-              markerHeight="5"
-              markerUnits="strokeWidth"
-              markerWidth="5"
-              orient="auto"
-              refX="1"
-              refY="5"
-              viewBox="0 0 10 10"
-            >
-              <path d="M 0 0 L 10 5 L 0 10 z" fill={c} />
-            </marker>
-          </defs>
-        ))}
+  return (
+    <svg style={SVG_STYLE}>
+      {colors?.map((c) => (
+        <defs key={c}>
+          <marker
+            id={`triangle-${c}`}
+            markerHeight="5"
+            markerUnits="strokeWidth"
+            markerWidth="5"
+            orient="auto"
+            refX="1"
+            refY="5"
+            viewBox="0 0 10 10"
+          >
+            <path d="M 0 0 L 10 5 L 0 10 z" fill={c} />
+          </marker>
+        </defs>
+      ))}
 
-        {pointsData?.map((p) => {
-          return (
-            <path
-              id="p1"
-              d={p?.d}
-              fill="none"
-              key={p?.d}
-              markerEnd={`url(#triangle-${p?.color})`}
-              stroke={p?.color}
-              strokeWidth="2"
-              strokeDasharray={p?.stroke === 'dashed' ? 4 : 0}
-              strokeLinejoin="round"
-            />
-          )
-        })}
-      </svg>
-    ),
-    [colors, pointsData]
+      {pointsData?.map((p) => {
+        return (
+          <path
+            id="p1"
+            d={p?.d}
+            fill="none"
+            key={p?.d}
+            markerEnd={`url(#triangle-${p?.color})`}
+            stroke={p?.color}
+            strokeWidth="2"
+            strokeDasharray={p?.stroke === 'dashed' ? 4 : 0}
+            strokeLinejoin="round"
+          />
+        )
+      })}
+    </svg>
   )
 }

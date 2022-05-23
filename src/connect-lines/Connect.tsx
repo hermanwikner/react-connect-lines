@@ -14,38 +14,42 @@ interface ConnectProps extends Omit<ConnectElement, 'element'> {
 }
 
 export function Connect(props: ConnectProps) {
-  const {children, id} = props
-  const {addElement, removeElement} = useConnectElements()
+  const {children, id, edge = 'bezier', stroke = 'solid', color = 'magenta'} = props
+  const {dispatch} = useConnectElements()
   const [el, setEl] = useState<HTMLElement | null>(null)
   const [pressed, setPressed] = useState<boolean>(false)
   const addedRef = useRef<boolean>(false)
 
-  const add = useCallback(
+  const handleAdd = useCallback(
     (node: HTMLElement) => {
       if (addedRef.current === false) {
         setEl(node)
 
-        addElement({
+        dispatch({
+          type: 'add',
           ...props,
-          edge: props?.edge || 'bezier',
-          stroke: props?.stroke || 'solid',
+          edge,
+          stroke,
           element: node,
+          color,
         })
 
         addedRef.current = true
       }
     },
-    [addElement, props]
+    [dispatch, edge, props, stroke, color]
   )
 
   const handleUpdate = useCallback(() => {
-    addElement({
+    dispatch({
+      type: 'add',
       ...props,
-      edge: props?.edge || 'bezier',
-      stroke: props?.stroke || 'solid',
+      edge,
+      stroke,
       element: el,
+      color,
     })
-  }, [addElement, el, props])
+  }, [dispatch, props, edge, stroke, el, color])
 
   useLayoutEffect(() => {
     if (!el) return
@@ -64,69 +68,48 @@ export function Connect(props: ConnectProps) {
 
     return cloneElement(children, {
       ...childProps,
-      ref: (node: React.RefObject<HTMLElement>) => {
-        add(node as any)
+      ref: (node: HTMLElement) => {
+        handleAdd(node)
 
-        if (typeof children === 'function') {
-          childProps.ref(node)
-        }
+        if (typeof children === 'function') childProps.ref(node)
       },
 
       // Drag support
       onMouseMove: () => {
-        if (pressed) {
-          handleUpdate()
-        }
-
-        if (typeof childProps.onMouseUp === 'function') {
-          childProps.onMouseUp()
-        }
+        if (pressed) handleUpdate()
+        if (typeof childProps.onMouseUp === 'function') childProps.onMouseUp()
       },
       onMouseDown: () => {
         setPressed(true)
-
-        if (typeof childProps.onMouseDown === 'function') {
-          childProps.onMouseDown()
-        }
+        if (typeof childProps.onMouseDown === 'function') childProps.onMouseDown()
       },
       onMouseUp: () => {
         setPressed(false)
-
-        if (typeof childProps.onMouseUp === 'function') {
-          childProps.onMouseUp()
-        }
+        if (typeof childProps.onMouseUp === 'function') childProps.onMouseUp()
       },
       onTouchMove: () => {
-        if (pressed) {
-          handleUpdate()
-        }
-
-        if (typeof childProps.onTouchMove === 'function') {
-          childProps.onTouchMove()
-        }
+        if (pressed) handleUpdate()
+        if (typeof childProps.onTouchMove === 'function') childProps.onTouchMove()
       },
       onTouchStart: () => {
         setPressed(true)
-
-        if (typeof childProps.onTouchStart === 'function') {
-          childProps.onTouchStart()
-        }
+        if (typeof childProps.onTouchStart === 'function') childProps.onTouchStart()
       },
       onTouchEnd: () => {
         setPressed(false)
-
-        if (typeof childProps.onTouchEnd === 'function') {
-          childProps.onTouchEnd()
-        }
+        if (typeof childProps.onTouchEnd === 'function') childProps.onTouchEnd()
       },
     })
-  }, [add, children, handleUpdate, pressed])
+  }, [handleAdd, children, handleUpdate, pressed])
 
   useEffect(() => {
     return () => {
-      removeElement(id)
+      dispatch({
+        type: 'remove',
+        id,
+      })
     }
-  }, [id, removeElement])
+  }, [dispatch, id])
 
   return clone
 }
