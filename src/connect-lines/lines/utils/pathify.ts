@@ -1,4 +1,4 @@
-import {ConnectElement} from '../elements'
+import {ConnectElement} from '../../elements'
 
 interface PathifyProps {
   paths: {x: string | number; y: string | number}[]
