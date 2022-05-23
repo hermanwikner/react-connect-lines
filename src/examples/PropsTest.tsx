@@ -77,7 +77,7 @@ export function PropsTest() {
   }, [])
 
   const handleConnect = useCallback(
-    (changeProps) => {
+    (changeProps: any) => {
       const {target, connectId} = changeProps
 
       const exists = (connections.find((c) => c.id === target)?.connectWith || []).includes(

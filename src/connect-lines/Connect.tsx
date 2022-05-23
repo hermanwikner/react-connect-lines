@@ -21,7 +21,7 @@ export function Connect(props: ConnectProps) {
   const addedRef = useRef<boolean>(false)
 
   const add = useCallback(
-    (node) => {
+    (node: HTMLElement) => {
       if (addedRef.current === false) {
         setEl(node)
 
@@ -65,7 +65,7 @@ export function Connect(props: ConnectProps) {
     return cloneElement(children, {
       ...childProps,
       ref: (node: React.RefObject<HTMLElement>) => {
-        add(node)
+        add(node as any)
 
         if (typeof children === 'function') {
           childProps.ref(node)
