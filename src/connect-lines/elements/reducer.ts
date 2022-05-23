@@ -4,11 +4,13 @@ type ActionTypes = 'add' | 'remove'
 
 export function connectElementsReducer(
   state: ConnectElementsContextValue,
-  payload: Partial<ConnectElement> & {type: ActionTypes}
+  payload: ConnectElement & {type: ActionTypes}
 ): ConnectElementsContextValue {
-  const {type, id, element, connectWith, color} = payload
+  const {type, id, element, connectWith, color, stroke, edge} = payload
 
   const exists = state?.elements?.some((l) => l.id === id)
+  const connectWithArr = connectWith || []
+  const node: ConnectElement = {id, element, color, stroke, edge, connectWith: connectWithArr}
 
   if (type === 'add') {
     if (!element || !id) return state
@@ -16,14 +18,14 @@ export function connectElementsReducer(
     if (!exists) {
       return {
         ...state,
-        elements: [...state.elements, {id, element, color, connectWith: connectWith || []}],
+        elements: [...state.elements, node],
       }
     }
 
     if (exists) {
       const next = [...state.elements].map((el) => {
         if (el.id === id) {
-          return {id, element, color, connectWith: connectWith || []}
+          return node
         }
 
         return el

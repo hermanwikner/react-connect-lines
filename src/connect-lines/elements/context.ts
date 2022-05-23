@@ -1,10 +1,12 @@
 import {createContext} from 'react'
 
 export interface ConnectElement {
-  id: string
-  element: HTMLElement | null | undefined
-  connectWith?: string[]
   color?: string
+  connectWith?: string[]
+  element: HTMLElement | null | undefined
+  id: string
+  stroke?: 'solid' | 'dashed' | undefined
+  edge?: 'bezier' | 'step' | undefined
 }
 
 export type ConnectElementsContextValue = {

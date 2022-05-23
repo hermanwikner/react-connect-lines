@@ -1,4 +1,12 @@
-import React, {cloneElement, useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import React, {
+  cloneElement,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import {ConnectElement, useConnectElements} from './elements'
 
 interface ConnectProps extends Omit<ConnectElement, 'element'> {
@@ -19,23 +27,35 @@ export function Connect(props: ConnectProps) {
 
         addElement({
           ...props,
-          id,
+          edge: props?.edge || 'bezier',
           element: node,
         })
 
         addedRef.current = true
       }
     },
-    [addElement, id, props]
+    [addElement, props]
   )
 
   const handleUpdate = useCallback(() => {
     addElement({
       ...props,
-      id,
+      edge: props?.edge || 'bezier',
       element: el,
     })
-  }, [addElement, el, id, props])
+  }, [addElement, el, props])
+
+  useLayoutEffect(() => {
+    if (!el) return
+    const ro = new ResizeObserver(handleUpdate)
+
+    ro.observe(el)
+
+    return () => {
+      ro.disconnect()
+      ro.unobserve(el)
+    }
+  }, [el, handleUpdate])
 
   const clone = useMemo(() => {
     const {props: childProps} = children

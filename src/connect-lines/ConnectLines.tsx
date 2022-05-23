@@ -1,23 +1,22 @@
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react'
-import styled from 'styled-components'
-import {useConnectElements} from '../elements'
-import {getGroupedConnections} from './getGroupedConnections'
-import {getPathData} from './getPathData'
+import {useConnectElements} from './elements'
+import {getGroupedConnections, getPathData, pathify} from './utils'
 
-const Svg = styled.svg`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  pointer-events: none;
-  width: 100%;
-  height: 100%;
-`
+const SVG_STYLE: React.CSSProperties = {
+  position: 'fixed',
+  top: '0',
+  left: '0',
+  right: '0',
+  pointerEvents: 'none',
+  width: '100%',
+  height: '100%',
+  zIndex: -1,
+}
 
 const DEFAULT_COLOR = 'magenta'
 const EMPTY_ARRAY: [] = []
 
-type PointsData = {d: string; color: string} | undefined
+type PointsData = {d: string; color: string; stroke: 'solid' | 'dashed' | undefined} | undefined
 
 export function ConnectLines() {
   const [pointsData, setPointsData] = useState<PointsData[]>(EMPTY_ARRAY)
@@ -41,16 +40,20 @@ export function ConnectLines() {
 
       const points = groupedConnections
         .map((data) => {
-          const {from, to: toArray, color} = data || {}
+          const {from, to: toArray, color, stroke, edge} = data || {}
 
           const pathDataArr = toArray?.map((to) => {
             const pathData = getPathData({from, to})
 
             if (!pathData) return
 
+            const path = pathify({paths: pathData, edge: data?.edge})
+
             return {
-              d: pathData,
+              d: path,
               color: color || DEFAULT_COLOR,
+              stroke: stroke,
+              edge: edge,
             }
           })
 
@@ -82,7 +85,7 @@ export function ConnectLines() {
   if ((pointsData || EMPTY_ARRAY).length === 0) return null
 
   return (
-    <Svg>
+    <svg style={SVG_STYLE}>
       {colors?.map((c) => (
         <defs key={c}>
           <marker
@@ -103,15 +106,18 @@ export function ConnectLines() {
       {pointsData?.map((p) => {
         return (
           <path
+            id="p1"
             d={p?.d}
             fill="none"
             key={p?.d}
             markerEnd={`url(#triangle-${p?.color})`}
             stroke={p?.color}
             strokeWidth="2"
+            strokeDasharray={p?.stroke === 'dashed' ? 4 : 0}
+            strokeLinejoin="round"
           />
         )
       })}
-    </Svg>
+    </svg>
   )
 }

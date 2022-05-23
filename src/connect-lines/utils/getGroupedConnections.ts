@@ -24,6 +24,8 @@ export function getGroupedConnections(props: GetGroupedConnectionsProps) {
         from: element?.getBoundingClientRect(),
         to: boundingRects,
         color: color,
+        stroke: el.stroke,
+        edge: el.edge,
       }
     })
     .filter(Boolean)

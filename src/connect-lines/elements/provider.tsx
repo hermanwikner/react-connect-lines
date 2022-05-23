@@ -1,5 +1,5 @@
 import {useCallback, useMemo, useReducer} from 'react'
-import {ConnectLines} from '../lines'
+import {ConnectLines} from '../ConnectLines'
 import {ConnectElement, ConnectElementsContext} from './context'
 import {connectElementsReducer} from './reducer'
 
@@ -18,10 +18,7 @@ export function ConnectElementsProvider(props: ConnectElementsProviderProps) {
   const handleAdd = useCallback((addProps: ConnectElement) => {
     dispatch({
       type: 'add',
-      element: addProps.element,
-      id: addProps.id,
-      connectWith: addProps.connectWith,
-      color: addProps.color,
+      ...addProps,
     })
   }, [])
 
@@ -29,7 +26,7 @@ export function ConnectElementsProvider(props: ConnectElementsProviderProps) {
     dispatch({
       type: 'remove',
       id: id,
-    })
+    } as any)
   }, [])
 
   const ctxVal = useMemo(
