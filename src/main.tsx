@@ -2,8 +2,8 @@ import {studioTheme, ThemeProvider} from '@sanity/ui'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
+import {ConnectProvider} from '../connect-lines'
 import App from './App'
-import {ConnectProvider} from './connect-lines'
 
 ReactDOM.render(
   <React.StrictMode>

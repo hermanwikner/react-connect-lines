@@ -1,6 +1,6 @@
 import {Card, Container, Grid} from '@sanity/ui'
 import {motion} from 'framer-motion'
-import {Connect} from '../connect-lines'
+import {Connect} from '../../connect-lines'
 
 const MotionCard = motion(Card)
 
