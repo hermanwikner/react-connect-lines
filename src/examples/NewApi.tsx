@@ -1,6 +1,6 @@
 import {Card, Container, Grid} from '@sanity/ui'
 import {motion} from 'framer-motion'
-import {Connect} from '../../react-connect-lines'
+import {Connect} from '../../lib'
 
 const MotionCard = motion(Card)
 
@@ -21,7 +21,7 @@ export function NewApi() {
             },
           ]}
         >
-          <MotionCard padding={4} border tone="primary">
+          <MotionCard padding={4} border tone="primary" drag dragMomentum={false}>
             Card 1
           </MotionCard>
         </Connect>

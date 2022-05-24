@@ -2,7 +2,7 @@ import {studioTheme, ThemeProvider} from '@sanity/ui'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import {ConnectProvider} from '../react-connect-lines'
+import {ConnectProvider} from '../lib'
 import App from './App'
 
 ReactDOM.render(
