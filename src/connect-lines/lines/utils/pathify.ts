@@ -1,8 +1,8 @@
-import {ConnectElement} from '../../elements'
+import {Edge} from '../../elements'
 
 interface PathifyProps {
   paths: {x: string | number; y: string | number}[]
-  edge?: Pick<ConnectElement, 'edge'> | string
+  edge?: Edge
 }
 
 export const pathify = (props: PathifyProps) => {
