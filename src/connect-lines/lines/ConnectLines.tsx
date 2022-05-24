@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react'
-import {useConnectElements} from '../elements'
+import {Edge, Stroke, useConnectElements} from '../elements'
 import {getGroupedConnections, getPathData, pathify} from './utils'
 
 const SVG_STYLE: React.CSSProperties = {
@@ -16,15 +16,30 @@ const SVG_STYLE: React.CSSProperties = {
 const DEFAULT_COLOR = 'magenta'
 const EMPTY_ARRAY: [] = []
 
-type PointsData = {d: string; color: string; stroke: 'solid' | 'dashed' | undefined} | undefined
+type PointsData = (
+  | {
+      rect: DOMRect | undefined
+      color: string | undefined
+      edge: Edge
+      stroke: Stroke
+      d: string
+    }
+  | undefined
+)[]
 
 export function ConnectLines() {
-  const [pointsData, setPointsData] = useState<PointsData[]>(EMPTY_ARRAY)
+  const [pointsData, setPointsData] = useState<PointsData>(EMPTY_ARRAY)
   const {elements} = useConnectElements()
   const raf = useRef<number>()
 
   const colors = useMemo(
-    () => [...new Set([...elements.map((e) => e.color), DEFAULT_COLOR])].filter(Boolean),
+    () =>
+      [
+        ...new Set([
+          ...elements.map((e) => e.connectWith?.map((c) => c?.color)).flat(),
+          DEFAULT_COLOR,
+        ]),
+      ].filter(Boolean),
     [elements]
   )
 
@@ -38,22 +53,20 @@ export function ConnectLines() {
 
       const points = groupedConnections
         .map((data) => {
-          const {from, to: toArray, color, stroke, edge} = data || {}
+          const {from, to: toArray} = data || {}
 
           const pathDataArr = toArray?.map((to) => {
-            const pathData = getPathData({from, to})
+            const pathData = getPathData({from, to: to.rect})
 
             if (!pathData) return
 
-            const path = pathify({paths: pathData, edge: data?.edge})
+            const path = pathify({paths: pathData, edge: to?.edge})
 
             if (!/\d/.test(path)) return
 
             return {
               d: path,
-              color: color || DEFAULT_COLOR,
-              stroke: stroke,
-              edge: edge,
+              ...to,
             }
           })
 

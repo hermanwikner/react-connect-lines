@@ -14,7 +14,7 @@ interface ConnectProps extends Omit<ConnectElement, 'element'> {
 }
 
 export function Connect(props: ConnectProps) {
-  const {children, id, edge = 'bezier', stroke = 'solid', color = 'magenta'} = props
+  const {children, id, connectWith} = props
   const {dispatch} = useConnectElements()
   const [el, setEl] = useState<HTMLElement | null>(null)
   const [pressed, setPressed] = useState<boolean>(false)
@@ -27,29 +27,25 @@ export function Connect(props: ConnectProps) {
 
         dispatch({
           type: 'add',
-          ...props,
-          edge,
-          stroke,
+          id,
+          connectWith,
           element: node,
-          color,
         })
 
         addedRef.current = true
       }
     },
-    [dispatch, edge, props, stroke, color]
+    [connectWith, dispatch, id]
   )
 
   const handleUpdate = useCallback(() => {
     dispatch({
       type: 'add',
-      ...props,
-      edge,
-      stroke,
+      id,
+      connectWith,
       element: el,
-      color,
     })
-  }, [dispatch, props, edge, stroke, el, color])
+  }, [dispatch, id, connectWith, el])
 
   useLayoutEffect(() => {
     if (!el) return

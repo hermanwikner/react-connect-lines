@@ -1,12 +1,19 @@
 import {createContext} from 'react'
 
-export interface ConnectElement {
+export type Edge = 'bezier' | 'step' | undefined
+export type Stroke = 'solid' | 'dashed' | undefined
+
+export interface ConnectWithProps {
   color?: string
-  connectWith?: string[]
-  edge?: 'bezier' | 'step' | undefined
+  edge?: Edge
+  stroke?: Stroke
+  id: string
+}
+
+export interface ConnectElement {
+  connectWith?: ConnectWithProps[]
   element?: HTMLElement | null
   id: string
-  stroke?: 'solid' | 'dashed' | undefined
 }
 
 export type ConnectElementsReducerPayload = ConnectElement & {type: 'add' | 'remove'}

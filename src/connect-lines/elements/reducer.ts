@@ -4,11 +4,11 @@ export function connectElementsReducer(
   state: ConnectElementsContextValue,
   payload: ConnectElementsReducerPayload
 ): ConnectElementsContextValue {
-  const {type, id, element, connectWith, color, stroke, edge} = payload
+  const {type, id, element, connectWith} = payload
 
   const exists = state?.elements?.some((l) => l.id === id)
   const connectWithArr = connectWith || []
-  const node: ConnectElement = {id, element, color, stroke, edge, connectWith: connectWithArr}
+  const node: ConnectElement = {id, element, connectWith: connectWithArr}
 
   if (type === 'add') {
     if (!element || !id) return state
@@ -42,7 +42,7 @@ export function connectElementsReducer(
         .map((x) => {
           return {
             ...x,
-            connectWith: x.connectWith?.filter((y) => y !== id),
+            connectWith: x.connectWith?.filter((y) => y.id !== id),
           }
         })
         .filter((el) => el.id !== id),

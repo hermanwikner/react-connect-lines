@@ -12,18 +12,22 @@ export function getGroupedConnections(props: GetGroupedConnectionsProps) {
   return elements
     .filter((e) => (e?.connectWith || EMPTY_ARRAY).length > 0)
     .map((el) => {
-      const {connectWith, element, ...rest} = el
+      const {connectWith, element} = el
 
-      const connectEls = elements.filter((c) => connectWith?.includes(c.id)).map((a) => a.element)
+      const connectEls = elements
+        .filter((c) => connectWith?.map((a) => a.id).includes(c.id))
+        .map((x) => ({
+          rect: x.element?.getBoundingClientRect(),
+          color: connectWith?.find((a) => a.id === x.id)?.color || 'magenta',
+          edge: connectWith?.find((a) => a.id === x.id)?.edge || 'bezier',
+          stroke: connectWith?.find((a) => a.id === x.id)?.stroke || 'solid',
+        }))
 
       if (connectEls.length === 0) return
 
-      const boundingRects = connectEls.map((x) => x?.getBoundingClientRect())
-
       return {
         from: element?.getBoundingClientRect(),
-        to: boundingRects,
-        ...rest,
+        to: connectEls,
       }
     })
     .filter(Boolean)
