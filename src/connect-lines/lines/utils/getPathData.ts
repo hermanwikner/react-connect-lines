@@ -3,7 +3,7 @@ interface GetPathDataProps {
   to?: DOMRectReadOnly
 }
 
-const OFFSET = 7
+const OFFSET = 9
 
 function getPosition(props: {from: DOMRect; to: DOMRect}) {
   const {from, to} = props

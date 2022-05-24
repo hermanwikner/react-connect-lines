@@ -21,7 +21,7 @@ export function NewApi() {
             },
           ]}
         >
-          <MotionCard padding={4} border tone="primary" drag dragMomentum={false}>
+          <MotionCard padding={4} border tone="primary">
             Card 1
           </MotionCard>
         </Connect>
