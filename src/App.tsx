@@ -1,4 +1,4 @@
-import {NewApi, PropsTest, StressTest} from './examples'
+import {NewApi} from './examples'
 
 export default function App() {
   return <NewApi />
