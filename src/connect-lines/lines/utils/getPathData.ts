@@ -8,8 +8,13 @@ const OFFSET = 7
 function getPosition(props: {from: DOMRect; to: DOMRect}) {
   const {from, to} = props
 
-  const bottomToTop = from.bottom < to.top
-  const topToBottom = from.top > to.bottom
+  const middleFrom = from.left + from.width / 2
+  const middleTo = to.left + to.width / 2
+
+  const yDiff = Math.round(Math.abs(middleFrom - middleTo)) - 30
+
+  const bottomToTop = from.bottom < to.top && yDiff < to.width
+  const topToBottom = from.top > to.bottom && yDiff < to.width
   const rightToLeft = from.left > to.right
   const leftToRight = from.right < to.left
 

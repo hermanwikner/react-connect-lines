@@ -12,14 +12,12 @@ export function NewApi() {
           id="card-1"
           connectWith={[
             {
-              id: 'card-4',
-              color: 'red',
-              stroke: 'dashed',
-              edge: 'step',
+              id: 'card-3',
+              color: 'lightseagreen',
             },
             {
-              id: 'card-3',
-              color: 'blue',
+              id: 'card-4',
+              color: 'darkviolet',
             },
           ]}
         >
@@ -44,12 +42,41 @@ export function NewApi() {
           id="card-4"
           connectWith={[
             {
-              id: 'card-3',
+              id: 'card-2',
+              color: 'coral',
             },
           ]}
         >
           <MotionCard padding={4} border tone="primary" drag dragMomentum={false}>
             Card 4
+          </MotionCard>
+        </Connect>
+
+        <Connect id="card-5">
+          <MotionCard padding={4} border tone="primary" drag dragMomentum={false}>
+            Card 5
+          </MotionCard>
+        </Connect>
+
+        <Connect
+          id="card-6"
+          connectWith={[
+            {
+              id: 'card-3',
+              color: 'magenta',
+            },
+            {
+              id: 'card-5',
+              color: 'crimson',
+            },
+            {
+              id: 'card-4',
+              color: 'CornflowerBlue',
+            },
+          ]}
+        >
+          <MotionCard padding={4} border tone="primary" drag dragMomentum={false}>
+            Card 6
           </MotionCard>
         </Connect>
       </Grid>
