@@ -3,18 +3,17 @@ interface GetPathDataProps {
   to?: DOMRectReadOnly
 }
 
-const OFFSET = 9
+const LINE_OFFSET = 9
+const POS_OFFSET = 40
 
 function getPosition(props: {from: DOMRect; to: DOMRect}) {
   const {from, to} = props
 
-  const middleFrom = from.left + from.width / 2
-  const middleTo = to.left + to.width / 2
+  const allowYConnect =
+    from.left - POS_OFFSET < to.right && from.right + to.width > to.right - POS_OFFSET
 
-  const yDiff = Math.round(Math.abs(middleFrom - middleTo)) - 30
-
-  const bottomToTop = from.bottom < to.top && yDiff < to.width
-  const topToBottom = from.top > to.bottom && yDiff < to.width
+  const bottomToTop = from.bottom < to.top && allowYConnect
+  const topToBottom = from.top > to.bottom && allowYConnect
   const rightToLeft = from.left > to.right
   const leftToRight = from.right < to.left
 
@@ -48,7 +47,7 @@ export function getPathData(props: GetPathDataProps) {
         },
         {
           x: to?.left + to.width / 2,
-          y: to.top - OFFSET,
+          y: to.top - LINE_OFFSET,
         },
       ]
     }
@@ -69,7 +68,7 @@ export function getPathData(props: GetPathDataProps) {
         },
         {
           x: to?.left + to.width / 2,
-          y: to.bottom + OFFSET,
+          y: to.bottom + LINE_OFFSET,
         },
       ]
     }
@@ -89,7 +88,7 @@ export function getPathData(props: GetPathDataProps) {
           y: to.top + to.height / 2,
         },
         {
-          x: to.right + OFFSET,
+          x: to.right + LINE_OFFSET,
           y: to.top + to.height / 2,
         },
       ]
@@ -110,7 +109,7 @@ export function getPathData(props: GetPathDataProps) {
           y: to.top + to.height / 2,
         },
         {
-          x: to.left - OFFSET,
+          x: to.left - LINE_OFFSET,
           y: to.top + to.height / 2,
         },
       ]
