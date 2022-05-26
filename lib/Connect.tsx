@@ -1,12 +1,4 @@
-import React, {
-  cloneElement,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import React, {cloneElement, useCallback, useEffect, useMemo, useRef} from 'react'
 import {ConnectElement, useConnectElements} from './elements'
 
 interface ConnectProps extends Omit<ConnectElement, 'element'> {

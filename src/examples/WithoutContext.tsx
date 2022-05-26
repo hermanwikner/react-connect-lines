@@ -1,4 +1,4 @@
-import {Card, Flex, Grid, Text} from '@sanity/ui'
+import {Card, Flex, Text} from '@sanity/ui'
 import {motion} from 'framer-motion'
 import {ConnectElement} from '../../lib'
 import {ConnectLines} from '../../lib/lines'
