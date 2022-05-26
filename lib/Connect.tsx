@@ -16,15 +16,11 @@ interface ConnectProps extends Omit<ConnectElement, 'element'> {
 export function Connect(props: ConnectProps) {
   const {children, id, connectWith} = props
   const {dispatch} = useConnectElements()
-  const [el, setEl] = useState<HTMLElement | null>(null)
-  const [pressed, setPressed] = useState<boolean>(false)
   const addedRef = useRef<boolean>(false)
 
   const handleAdd = useCallback(
     (node: HTMLElement) => {
       if (addedRef.current === false) {
-        setEl(node)
-
         dispatch({
           type: 'add',
           id,
@@ -38,27 +34,6 @@ export function Connect(props: ConnectProps) {
     [connectWith, dispatch, id]
   )
 
-  const handleUpdate = useCallback(() => {
-    dispatch({
-      type: 'add',
-      id,
-      connectWith,
-      element: el,
-    })
-  }, [dispatch, id, connectWith, el])
-
-  useLayoutEffect(() => {
-    if (!el) return
-    const ro = new ResizeObserver(handleUpdate)
-
-    ro.observe(el)
-
-    return () => {
-      ro.disconnect()
-      ro.unobserve(el)
-    }
-  }, [el, handleUpdate])
-
   const clone = useMemo(() => {
     const {props: childProps} = children
 
@@ -69,34 +44,8 @@ export function Connect(props: ConnectProps) {
 
         if (typeof children === 'function') childProps.ref(node)
       },
-
-      // Drag support
-      onMouseMove: () => {
-        if (pressed) handleUpdate()
-        if (typeof childProps.onMouseUp === 'function') childProps.onMouseUp()
-      },
-      onMouseDown: () => {
-        setPressed(true)
-        if (typeof childProps.onMouseDown === 'function') childProps.onMouseDown()
-      },
-      onMouseUp: () => {
-        setPressed(false)
-        if (typeof childProps.onMouseUp === 'function') childProps.onMouseUp()
-      },
-      onTouchMove: () => {
-        if (pressed) handleUpdate()
-        if (typeof childProps.onTouchMove === 'function') childProps.onTouchMove()
-      },
-      onTouchStart: () => {
-        setPressed(true)
-        if (typeof childProps.onTouchStart === 'function') childProps.onTouchStart()
-      },
-      onTouchEnd: () => {
-        setPressed(false)
-        if (typeof childProps.onTouchEnd === 'function') childProps.onTouchEnd()
-      },
     })
-  }, [handleAdd, children, handleUpdate, pressed])
+  }, [handleAdd, children])
 
   useEffect(() => {
     return () => {

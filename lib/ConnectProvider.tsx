@@ -1,8 +1,15 @@
-import {ConnectElementsProvider} from './elements'
+import React from 'react'
+import {ConnectElementsProvider, useConnectElements} from './elements'
 import {ConnectLines} from './lines'
 
 interface ConnectProviderProps {
   children: React.ReactNode
+}
+
+function ConnectProviderInner() {
+  const {elements} = useConnectElements()
+
+  return <ConnectLines elements={elements} />
 }
 
 export function ConnectProvider(props: ConnectProviderProps) {
@@ -11,7 +18,7 @@ export function ConnectProvider(props: ConnectProviderProps) {
   return (
     <ConnectElementsProvider>
       {children}
-      <ConnectLines />
+      <ConnectProviderInner />
     </ConnectElementsProvider>
   )
 }

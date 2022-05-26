@@ -1,16 +1,16 @@
 import {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react'
-import {Edge, Stroke, useConnectElements} from '../elements'
-import {getGroupedConnections, getPathData, pathify} from './utils'
+import {ConnectElement, Edge, Stroke} from '../elements'
+import {getElement, getGroupedConnections, getPathData, pathify} from './utils'
 
 const SVG_STYLE: React.CSSProperties = {
   position: 'fixed',
   top: '0',
   left: '0',
   right: '0',
+  bottom: '0',
   pointerEvents: 'none',
   width: '100%',
   height: '100%',
-  zIndex: -1,
 }
 
 const DEFAULT_COLOR = 'magenta'
@@ -27,9 +27,14 @@ type PointsData = (
   | undefined
 )[]
 
-export function ConnectLines() {
+interface ConnectLinesProps {
+  elements: ConnectElement[]
+}
+
+export function ConnectLines(props: ConnectLinesProps) {
   const [pointsData, setPointsData] = useState<PointsData>(EMPTY_ARRAY)
-  const {elements} = useConnectElements()
+  const [isInteracting, setIsInteracting] = useState<boolean>(false)
+  const {elements} = props
   const raf = useRef<number>()
 
   const colors = useMemo(
@@ -81,6 +86,18 @@ export function ConnectLines() {
     })
   }, [elements])
 
+  const handleStartInteracting = useCallback(() => {
+    setIsInteracting(true)
+  }, [])
+
+  const handleStopInteracting = useCallback(() => {
+    setIsInteracting(false)
+  }, [])
+
+  const handleUpdateLines = useCallback(() => {
+    if (isInteracting) handleCalcLines()
+  }, [handleCalcLines, isInteracting])
+
   useLayoutEffect(() => {
     handleCalcLines()
   }, [handleCalcLines])
@@ -94,6 +111,50 @@ export function ConnectLines() {
       window.removeEventListener('scroll', handleCalcLines)
     }
   }, [handleCalcLines])
+
+  const ro = useMemo(() => new ResizeObserver(handleCalcLines), [handleCalcLines])
+
+  useEffect(() => {
+    elements.forEach((el) => {
+      const element = getElement(el)
+
+      element?.addEventListener('mousedown', handleStartInteracting, {passive: true})
+      element?.addEventListener('mouseup', handleStopInteracting, {passive: true})
+      element?.addEventListener('mousemove', handleUpdateLines, {passive: true})
+      element?.addEventListener('touchstart', handleStartInteracting, {passive: true})
+      element?.addEventListener('touchend', handleStopInteracting, {passive: true})
+      element?.addEventListener('touchmove', handleUpdateLines, {passive: true})
+
+      if (element) {
+        ro.observe(element)
+      }
+    })
+
+    return () => {
+      elements.forEach((el) => {
+        const element = getElement(el)
+
+        element?.removeEventListener('mousedown', handleStartInteracting)
+        element?.removeEventListener('mouseup', handleStopInteracting)
+        element?.removeEventListener('mousemove', handleUpdateLines)
+        element?.removeEventListener('touchstart', handleStartInteracting)
+        element?.removeEventListener('touchend', handleStopInteracting)
+        element?.removeEventListener('touchmove', handleUpdateLines)
+
+        if (element) {
+          ro.disconnect()
+          ro.unobserve(element)
+        }
+      })
+    }
+  }, [
+    elements,
+    handleCalcLines,
+    handleStartInteracting,
+    handleStopInteracting,
+    handleUpdateLines,
+    ro,
+  ])
 
   return (
     <svg style={SVG_STYLE}>
@@ -123,7 +184,6 @@ export function ConnectLines() {
             fill="none"
             key={p?.d}
             markerEnd={`url(#triangle-${p?.color})`}
-            // markerStart={`url(#triangle-${p?.color})`}
             stroke={p?.color}
             strokeWidth="2"
             strokeDasharray={p?.stroke === 'dashed' ? 4 : 0}
