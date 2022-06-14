@@ -19,9 +19,6 @@
     "@types/react": "^17.0.33"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^22.0.0",
-    "@rollup/plugin-node-resolve": "^13.3.0",
-    "@rollup/plugin-typescript": "^8.3.2",
     "@types/lodash": "^4.14.182",
     "@types/react-dom": "^17.0.10",
     "@types/styled-components": "^5.1.25",
