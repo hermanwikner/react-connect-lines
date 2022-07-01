@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react'
-import {ConnectElement, Edge, Stroke} from '../elements'
+import {ConnectElement, Edge, Stroke} from '../types'
 import {getElement, getGroupedConnections, getPathData, pathify} from './utils'
 
 const SVG_STYLE: React.CSSProperties = {

@@ -1,5 +1,6 @@
 import React, {cloneElement, useCallback, useEffect, useMemo, useRef} from 'react'
-import {ConnectElement, useConnectElements} from './elements'
+import {useConnectElements} from './elements'
+import {ConnectElement} from './types'
 
 interface ConnectProps extends Omit<ConnectElement, 'element'> {
   children: React.ReactElement

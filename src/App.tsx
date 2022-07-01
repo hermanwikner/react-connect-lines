@@ -1,5 +1,5 @@
 import {Card, Container, Grid, Stack} from '@sanity/ui'
-import {WithContext} from './examples'
+import {WithContext, WithoutContext} from './examples'
 
 export default function App() {
   return (
@@ -10,7 +10,7 @@ export default function App() {
             {/* <Heading size={1}>With Context</Heading> */}
 
             <Grid columns={2} padding={[3, 4, 4, 8]} gapX={[7, 7, 7, 9]} gapY={[6, 6, 6, 8]}>
-              <WithContext />
+              <WithoutContext />
             </Grid>
           </Stack>
 

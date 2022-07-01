@@ -1,4 +1,4 @@
-import {ConnectElement, ConnectElementsContextValue, ConnectElementsReducerPayload} from './context'
+import {ConnectElement, ConnectElementsContextValue, ConnectElementsReducerPayload} from '../types'
 
 export function connectElementsReducer(
   state: ConnectElementsContextValue,
