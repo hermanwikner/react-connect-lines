@@ -1,7 +1,7 @@
 import {Card, Flex, Grid, Text} from '@sanity/ui'
 import {motion} from 'framer-motion'
 import React from 'react'
-import {Connect, ConnectProvider, ConnectElement} from '../../lib'
+import {Connect, ConnectProvider, ConnectElement} from '../../pkg'
 
 const DATA: ConnectElement[] = [
   {
