@@ -1,4 +1,4 @@
-import {ConnectElement} from '../../elements'
+import {ConnectElement} from '../../types'
 import {getElement} from './getElement'
 
 const EMPTY_ARRAY: [] = []

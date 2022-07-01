@@ -37,6 +37,10 @@ export function ConnectLines(props: ConnectLinesProps) {
   const {elements} = props
   const raf = useRef<number>()
 
+  /**
+   * Create array of all colors configured.
+   * These colors is used to render the svg markers (e.g arrows).
+   */
   const colors = useMemo(
     () =>
       [
@@ -54,6 +58,19 @@ export function ConnectLines(props: ConnectLinesProps) {
     }
 
     raf.current = window.requestAnimationFrame(() => {
+      /**
+       * The `getGroupedConnections` function returns:
+       *
+       *  {
+       *    from: DOMRect,
+       *    to: {
+       *       rect: DOMRect,
+       *       color: string,
+       *       edge: string,
+       *       stroke: string
+       *    }[]
+       *  }
+       */
       const groupedConnections = getGroupedConnections({elements})
 
       const points = groupedConnections
@@ -61,14 +78,27 @@ export function ConnectLines(props: ConnectLinesProps) {
           const {from, to: toArray} = data || {}
 
           const pathDataArr = toArray?.map((to) => {
+            /**
+             * The `getPathData` function returns an array of objects with
+             * x and y coordinates for the line.
+             */
             const pathData = getPathData({from, to: to.rect})
 
             if (!pathData) return
 
+            /**
+             * The `pathify` functions returns a svg-readable string of the coordinates
+             */
             const path = pathify({paths: pathData, edge: to?.edge})
 
+            /**
+             * Dummy validation of the path
+             */
             if (!/\d/.test(path)) return
 
+            /**
+             * Return the path (d) together with other relevant data such as color, stroke, edge.
+             */
             return {
               d: path,
               ...to,
@@ -86,6 +116,9 @@ export function ConnectLines(props: ConnectLinesProps) {
     })
   }, [elements])
 
+  /**
+   * Handle drag and drop gestures and update the paths
+   */
   const handleStartInteracting = useCallback(() => {
     setIsInteracting(true)
   }, [])

@@ -1,3 +1,3 @@
 export * from './Connect'
 export * from './ConnectProvider'
-export type {ConnectElement} from './elements/context'
+export type {ConnectElement} from './types'

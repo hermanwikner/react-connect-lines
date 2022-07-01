@@ -1,4 +1,4 @@
-import {Edge} from '../../elements'
+import {Edge} from '../../types'
 
 interface PathifyProps {
   paths: {x: string | number; y: string | number}[]

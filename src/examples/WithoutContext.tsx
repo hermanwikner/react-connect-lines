@@ -1,4 +1,4 @@
-import {Card, Flex, Text} from '@sanity/ui'
+import {Card, Flex, Grid, Text} from '@sanity/ui'
 import {motion} from 'framer-motion'
 import {ConnectElement} from '../../lib'
 import {ConnectLines} from '../../lib/lines'
@@ -63,7 +63,7 @@ const MotionCard = motion(Card)
 
 export function WithoutContext() {
   return (
-    <>
+    <Grid columns={2} gap={8}>
       <ConnectLines elements={ELEMENTS} />
 
       <MotionCard
@@ -161,6 +161,6 @@ export function WithoutContext() {
           </Text>
         </Flex>
       </MotionCard>
-    </>
+    </Grid>
   )
 }

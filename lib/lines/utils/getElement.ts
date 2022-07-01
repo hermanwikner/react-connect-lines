@@ -1,4 +1,4 @@
-import {ConnectElement} from '../../elements'
+import {ConnectElement} from '../../types'
 
 export function getElement(el: ConnectElement) {
   if (!el.element) {
