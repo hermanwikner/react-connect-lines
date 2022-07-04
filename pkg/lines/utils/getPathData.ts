@@ -1,9 +1,9 @@
 interface GetPathDataProps {
   from?: {
-    rect: DOMRectReadOnly
+    rect: DOMRect | undefined
   }
   to?: {
-    rect: DOMRectReadOnly
+    rect: DOMRect | undefined
   }
 }
 

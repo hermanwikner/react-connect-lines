@@ -1,4 +1,6 @@
-export * from './Connect'
-export * from './ConnectProvider'
-export * from './lines/ConnectLines'
-export type {ConnectElement} from './types'
+import {Connect} from './Connect'
+import {ConnectProvider} from './ConnectProvider'
+import {ConnectLines} from './lines/ConnectLines'
+import type {ConnectElement} from './types'
+
+export {Connect, ConnectProvider, ConnectLines, ConnectElement}
