@@ -14,9 +14,7 @@ export function connectElementsReducer(
     connectWith: connectWithArr,
   }
 
-  if (type === 'add') {
-    if (!element || !id) return state
-
+  if (type === 'add' && element) {
     if (!exists) {
       return {
         ...state,

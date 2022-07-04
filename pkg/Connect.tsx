@@ -9,23 +9,16 @@ interface ConnectProps extends Omit<ConnectElement, 'element'> {
 export function Connect(props: ConnectProps) {
   const {children, id, connectWith} = props
   const {dispatch} = useConnectElements()
-  const addedRef = useRef<boolean>(false)
+  const nodeRef = useRef<HTMLElement>()
 
-  const handleAdd = useCallback(
-    (node: HTMLElement) => {
-      if (addedRef.current === false) {
-        dispatch({
-          type: 'add',
-          id,
-          connectWith,
-          element: node,
-        })
-
-        addedRef.current = true
-      }
-    },
-    [connectWith, dispatch, id]
-  )
+  const handleAdd = useCallback(() => {
+    dispatch({
+      type: 'add',
+      id,
+      connectWith,
+      element: nodeRef.current,
+    })
+  }, [connectWith, dispatch, id])
 
   const clone = useMemo(() => {
     const {props: childProps} = children
@@ -33,12 +26,16 @@ export function Connect(props: ConnectProps) {
     return cloneElement(children, {
       ...childProps,
       ref: (node: HTMLElement) => {
-        handleAdd(node)
+        nodeRef.current = node
 
         if (typeof children === 'function') childProps.ref(node)
       },
     })
-  }, [handleAdd, children])
+  }, [children])
+
+  useEffect(() => {
+    handleAdd()
+  }, [props, handleAdd, nodeRef])
 
   useEffect(() => {
     return () => {
