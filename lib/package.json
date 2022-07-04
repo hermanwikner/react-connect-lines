@@ -1,10 +1,10 @@
 {
   "name": "react-connect-lines",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Connect elements with lines",
   "scripts": {
     "build": "parcel build --no-cache",
-    "watch": "parcel watch",
+    "watch": "rm -rf dist && parcel watch",
     "publish": "yarn build && npm publish"
   },
   "exports": {
@@ -17,6 +17,14 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
+  "targets": {
+    "main": {
+      "optimize": true
+    },
+    "module": {
+      "optimize": true
+    }
+  },
   "devDependencies": {
     "@parcel/packager-ts": "2.6.2",
     "@parcel/transformer-typescript-types": "2.6.2",
