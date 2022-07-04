@@ -4,7 +4,8 @@
   "description": "Connect elements with lines",
   "scripts": {
     "build": "parcel build --no-cache",
-    "watch": "parcel watch"
+    "watch": "parcel watch",
+    "publish": "yarn build && npm publish"
   },
   "exports": {
     ".": {
@@ -25,6 +26,9 @@
   "peerDependencies": {
     "react": "^17.0.2"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hermanwikner/react-connect-lines.git"
@@ -39,6 +43,5 @@
   "bugs": {
     "url": "https://github.com/hermanwikner/react-connect-lines/issues"
   },
-  "homepage": "https://github.com/hermanwikner/react-connect-lines#readme",
-  "dependencies": {}
+  "homepage": "https://github.com/hermanwikner/react-connect-lines#readme"
 }
