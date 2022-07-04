@@ -16,10 +16,6 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
-  "files": [
-    "elements",
-    "lines"
-  ],
   "devDependencies": {
     "@parcel/packager-ts": "2.6.2",
     "@parcel/transformer-typescript-types": "2.6.2",
