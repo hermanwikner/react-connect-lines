@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && cd ./pkg && yarn build",
     "preview": "vite preview",
     "build-lib": "cd ./pkg && yarn build"
   },
