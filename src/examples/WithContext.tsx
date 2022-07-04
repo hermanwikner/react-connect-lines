@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Card,
-  Container,
   Flex,
   Grid,
   Label,
@@ -95,9 +94,16 @@ export function WithContext() {
 
   return (
     <ConnectProvider>
-      <Container width={3} paddingX={7} paddingY={5} sizing="border">
+      <Card padding={5} sizing="border" height="fill">
         <Flex marginBottom={4}>
-          <Button text="add" onClick={add} fontSize={1} padding={2} mode="ghost" icon={AddIcon} />
+          <Button
+            text="Add element"
+            onClick={add}
+            fontSize={1}
+            padding={2}
+            mode="ghost"
+            icon={AddIcon}
+          />
         </Flex>
 
         <Grid columns={2} gapY={7} gapX={9}>
@@ -159,6 +165,10 @@ export function WithContext() {
                                   {connections
                                     .filter((i) => i.id !== c?.id)
                                     ?.map((x, index) => {
+                                      const connected = Boolean(
+                                        c.connectWith?.find((y) => y.id === x.id)
+                                      )
+
                                       return (
                                         <Stack key={x.id} space={4}>
                                           <Text weight="bold" size={1}>
@@ -174,9 +184,7 @@ export function WithContext() {
                                                 <Box style={{height: 25}}>
                                                   <Switch
                                                     onChange={(e) => handleConnect(e, c, x)}
-                                                    checked={Boolean(
-                                                      c.connectWith?.find((y) => y.id === x.id)
-                                                    )}
+                                                    checked={connected}
                                                   />
                                                 </Box>
                                               </Stack>
@@ -188,6 +196,7 @@ export function WithContext() {
                                               </Label>
 
                                               <Select
+                                                disabled={!connected}
                                                 fontSize={1}
                                                 padding={2}
                                                 defaultValue={
@@ -211,6 +220,7 @@ export function WithContext() {
                                               </Label>
 
                                               <Select
+                                                disabled={!connected}
                                                 fontSize={1}
                                                 padding={2}
                                                 defaultValue={
@@ -234,12 +244,13 @@ export function WithContext() {
                                               </Label>
 
                                               <Card
+                                                disabled={!connected}
                                                 as="input"
                                                 radius={2}
                                                 style={{height: 25}}
                                                 defaultValue={
                                                   c.connectWith?.find((y) => y.id === x.id)
-                                                    ?.color || 'magenta'
+                                                    ?.color || '#FF00FF'
                                                 }
                                                 onChange={(e: any) =>
                                                   handleUpdate(c, x, {
@@ -268,7 +279,7 @@ export function WithContext() {
             </Connect>
           ))}
         </Grid>
-      </Container>
+      </Card>
     </ConnectProvider>
   )
 }
