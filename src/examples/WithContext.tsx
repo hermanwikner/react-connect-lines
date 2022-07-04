@@ -18,7 +18,7 @@ import {
 } from '@sanity/ui'
 import {motion} from 'framer-motion'
 import {useCallback, useState} from 'react'
-import {Connect, ConnectProvider, ConnectElement} from '../../pkg'
+import {Connect, ConnectProvider, ConnectElement} from '../../lib'
 import {randomEmojiId} from './randomId'
 
 const MotionCard = motion(Card)
