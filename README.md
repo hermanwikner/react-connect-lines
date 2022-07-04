@@ -4,6 +4,10 @@
 ## React connect lines
 This library lets you draw lines between elements ([demo](https://react-connect-lines.vercel.app)).
 
+### Installation
+
+`yarn add react-connect-lines` or `npm i react-connect-lines`
+
 ### Usage
 First, wrap your app with the `ConnectProvider`. Then, wrap the elements you want to connect with the `Connect` component. 
 
