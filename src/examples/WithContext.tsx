@@ -66,7 +66,6 @@ export function WithContext() {
               if (y.id === child.id) {
                 return {
                   ...y,
-                  papa: 'mama',
                   ...value,
                 }
               }
