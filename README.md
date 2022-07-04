@@ -31,7 +31,6 @@ export function MyApp() {
         connectWith={[
           { id: "element-2", color: "red", stroke: "dashed" },
           { id: "element-3", edge: "step" },
-          { id: "element-4" },
         ]}
       >
         <MyElement1 />
@@ -48,7 +47,3 @@ export function MyApp() {
   );
 }
 ```
-
-
-
-
