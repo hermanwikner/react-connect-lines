@@ -1,6 +1,6 @@
 {
   "name": "react-connect-lines",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Connect elements with lines",
   "scripts": {
     "build": "parcel build --no-cache",
