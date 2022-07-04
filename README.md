@@ -19,7 +19,7 @@ The `Connect` component accepts two props:
     - `edge?: "bezier" | "step"` – the curve of the line (`bezier` is default)
     - `color?: string` – the color of the line (`magenta` is default)
 
-
+### Example
 ```js
 import { ConnectProvider, Connect } from 'react-connect-lines'
 
