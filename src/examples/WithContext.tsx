@@ -10,6 +10,7 @@ import {
   Menu,
   MenuButton,
   MenuDivider,
+  MenuItem,
   Select,
   Stack,
   Switch,
@@ -28,6 +29,15 @@ export function WithContext() {
   const add = useCallback(() => {
     setConnections((prev) => [...prev, {id: randomEmojiId()}])
   }, [])
+
+  const remove = useCallback(
+    (id: string) => {
+      const update = connections.filter((c) => c.id !== id)
+
+      setConnections(update)
+    },
+    [connections]
+  )
 
   const handleConnect = useCallback(
     (e, from, to) => {
@@ -83,15 +93,6 @@ export function WithContext() {
     [connections]
   )
 
-  const handleDelete = useCallback(
-    (id: string) => {
-      const update = connections.filter((c) => c.id !== id)
-
-      setConnections(update)
-    },
-    [connections]
-  )
-
   return (
     <ConnectProvider>
       <Container width={3} paddingX={7} paddingY={5} sizing="border">
@@ -100,7 +101,7 @@ export function WithContext() {
         </Flex>
 
         <Grid columns={2} gapY={7} gapX={9}>
-          {connections.map((c, index) => (
+          {connections.map((c) => (
             <Connect id={c.id} connectWith={c?.connectWith} key={c.id}>
               <MotionCard
                 padding={4}
@@ -108,8 +109,8 @@ export function WithContext() {
                 radius={2}
                 drag
                 dragMomentum={false}
-                initial={{scale: 0.5, y: 0}}
-                animate={{scale: 1, y: index * 50}}
+                initial={{scale: 0.5}}
+                animate={{scale: 1}}
                 style={{position: 'absolute'}}
               >
                 <Stack space={4}>
@@ -121,12 +122,20 @@ export function WithContext() {
                     </Box>
 
                     <Flex gap={2} marginLeft={7}>
-                      <Button
-                        icon={TrashIcon}
-                        mode="ghost"
-                        fontSize={1}
-                        padding={2}
-                        onClick={() => handleDelete(c.id)}
+                      <MenuButton
+                        id="del"
+                        button={<Button icon={TrashIcon} mode="ghost" fontSize={1} padding={2} />}
+                        menu={
+                          <Menu>
+                            <MenuItem
+                              text="Confirm"
+                              fontSize={1}
+                              padding={2}
+                              tone="critical"
+                              onClick={() => remove(c.id)}
+                            />
+                          </Menu>
+                        }
                       />
 
                       <MenuButton
