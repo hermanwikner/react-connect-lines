@@ -8,7 +8,11 @@ export function connectElementsReducer(
 
   const exists = state?.elements?.some((l) => l.id === id)
   const connectWithArr = connectWith || []
-  const node: ConnectElement = {id, element, connectWith: connectWithArr}
+  const node: ConnectElement & {element?: HTMLElement | null} = {
+    id,
+    element,
+    connectWith: connectWithArr,
+  }
 
   if (type === 'add') {
     if (!element || !id) return state

@@ -29,6 +29,9 @@ const DATA: ConnectElement[] = [
         id: 'card-1',
         color: 'salmon',
       },
+      {
+        id: 'card-4',
+      },
     ],
   },
   {

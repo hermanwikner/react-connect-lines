@@ -10,11 +10,13 @@ export interface ConnectWithProps {
 
 export interface ConnectElement {
   connectWith?: ConnectWithProps[]
-  element?: HTMLElement | null
   id: string
 }
 
-export type ConnectElementsReducerPayload = ConnectElement & {type: 'add' | 'remove'}
+export type ConnectElementsReducerPayload = ConnectElement & {
+  type: 'add' | 'remove'
+  element?: HTMLElement | null
+}
 
 export type ConnectElementsDispatch = React.Dispatch<ConnectElementsReducerPayload>
 

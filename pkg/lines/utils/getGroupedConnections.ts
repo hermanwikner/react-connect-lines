@@ -10,10 +10,14 @@ interface GetGroupedConnectionsProps {
 export function getGroupedConnections(props: GetGroupedConnectionsProps) {
   const {elements} = props
 
+  // const connections = elements?.map((e) => e.connectWith?.map((x) => x?.id)).flat()
+
   const grouped = elements
     .filter((e) => (e?.connectWith || EMPTY_ARRAY).length > 0)
     .map((el) => {
       const {connectWith} = el
+
+      // const connectionsLen = connections.filter((y) => y === el.id)?.length || 0
 
       const connectEls = elements
         .filter((c) => connectWith?.map((a) => a.id).includes(c.id))
@@ -23,13 +27,16 @@ export function getGroupedConnections(props: GetGroupedConnectionsProps) {
             color: connectWith?.find((a) => a.id === x.id)?.color || 'magenta',
             edge: connectWith?.find((a) => a.id === x.id)?.edge || 'bezier',
             stroke: connectWith?.find((a) => a.id === x.id)?.stroke || 'solid',
+            // connectionsLen: connectionsLen,
           }
         })
 
       if (connectEls.length === 0) return
 
       return {
-        from: getElement(el)?.getBoundingClientRect(),
+        from: {
+          rect: getElement(el)?.getBoundingClientRect(),
+        },
         to: connectEls,
       }
     })

@@ -82,7 +82,7 @@ export function ConnectLines(props: ConnectLinesProps) {
              * The `getPathData` function returns an array of objects with
              * x and y coordinates for the line.
              */
-            const pathData = getPathData({from, to: to.rect})
+            const pathData = getPathData({from: from, to: to})
 
             if (!pathData) return
 

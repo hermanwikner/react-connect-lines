@@ -1,6 +1,10 @@
 interface GetPathDataProps {
-  from?: DOMRectReadOnly
-  to?: DOMRectReadOnly
+  from?: {
+    rect: DOMRectReadOnly
+  }
+  to?: {
+    rect: DOMRectReadOnly
+  }
 }
 
 const LINE_OFFSET = 9
@@ -25,29 +29,31 @@ function getPosition(props: {from: DOMRect; to: DOMRect}) {
 
 export function getPathData(props: GetPathDataProps) {
   const {from, to} = props
+  const fromRect = from?.rect
+  const toRect = to?.rect
 
-  if (!from || !to) return
+  if (!fromRect || !toRect) return
 
-  const position = getPosition({from, to})
+  const position = getPosition({from: fromRect, to: toRect})
 
   switch (position) {
     case 'bottom-to-top': {
       return [
         {
-          x: from?.left + from.width / 2,
-          y: from?.bottom,
+          x: fromRect?.left + fromRect.width / 2,
+          y: fromRect?.bottom,
         },
         {
-          x: from?.left + from.width / 2,
-          y: from.bottom - (from.bottom - to.top) / 2,
+          x: fromRect?.left + fromRect.width / 2,
+          y: fromRect.bottom - (fromRect.bottom - toRect.top) / 2,
         },
         {
-          x: to?.left + to.width / 2,
-          y: from.bottom - (from.bottom - to.top) / 2,
+          x: toRect?.left + toRect.width / 2,
+          y: fromRect.bottom - (fromRect.bottom - toRect.top) / 2,
         },
         {
-          x: to?.left + to.width / 2,
-          y: to.top - LINE_OFFSET,
+          x: toRect?.left + toRect.width / 2,
+          y: toRect.top - LINE_OFFSET,
         },
       ]
     }
@@ -55,20 +61,20 @@ export function getPathData(props: GetPathDataProps) {
     case 'top-to-bottom': {
       return [
         {
-          x: from?.left + from.width / 2,
-          y: from?.top,
+          x: fromRect?.left + fromRect.width / 2,
+          y: fromRect?.top,
         },
         {
-          x: from?.left + from.width / 2,
-          y: from.top - (from.top - to.bottom) / 2,
+          x: fromRect?.left + fromRect.width / 2,
+          y: fromRect.top - (fromRect.top - toRect.bottom) / 2,
         },
         {
-          x: to?.left + to.width / 2,
-          y: from.top - (from.top - to.bottom) / 2,
+          x: toRect?.left + toRect.width / 2,
+          y: fromRect.top - (fromRect.top - toRect.bottom) / 2,
         },
         {
-          x: to?.left + to.width / 2,
-          y: to.bottom + LINE_OFFSET,
+          x: toRect?.left + toRect.width / 2,
+          y: toRect.bottom + LINE_OFFSET,
         },
       ]
     }
@@ -76,20 +82,20 @@ export function getPathData(props: GetPathDataProps) {
     case 'right-to-left': {
       return [
         {
-          x: from?.left,
-          y: from?.bottom - from.height / 2,
+          x: fromRect?.left,
+          y: fromRect?.bottom - fromRect.height / 2,
         },
         {
-          x: (to.right + from.left) / 2,
-          y: from?.bottom - from.height / 2,
+          x: (toRect.right + fromRect.left) / 2,
+          y: fromRect?.bottom - fromRect.height / 2,
         },
         {
-          x: (to.right + from.left) / 2,
-          y: to.top + to.height / 2,
+          x: (toRect.right + fromRect.left) / 2,
+          y: toRect.top + toRect.height / 2,
         },
         {
-          x: to.right + LINE_OFFSET,
-          y: to.top + to.height / 2,
+          x: toRect.right + LINE_OFFSET,
+          y: toRect.top + toRect.height / 2,
         },
       ]
     }
@@ -97,20 +103,20 @@ export function getPathData(props: GetPathDataProps) {
     case 'left-to-right': {
       return [
         {
-          x: from?.right,
-          y: from?.bottom - from.height / 2,
+          x: fromRect?.right,
+          y: fromRect?.bottom - fromRect.height / 2,
         },
         {
-          x: (to.left + from.right) / 2,
-          y: from?.bottom - from.height / 2,
+          x: (toRect.left + fromRect.right) / 2,
+          y: fromRect?.bottom - fromRect.height / 2,
         },
         {
-          x: (to.left + from.right) / 2,
-          y: to.top + to.height / 2,
+          x: (toRect.left + fromRect.right) / 2,
+          y: toRect.top + toRect.height / 2,
         },
         {
-          x: to.left - LINE_OFFSET,
-          y: to.top + to.height / 2,
+          x: toRect.left - LINE_OFFSET,
+          y: toRect.top + toRect.height / 2,
         },
       ]
     }
