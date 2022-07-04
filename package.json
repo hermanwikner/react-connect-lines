@@ -5,7 +5,7 @@
     "dev": "vite --host",
     "preview": "vite preview",
     "build-vite": "tsc && vite build",
-    "build-lib": "cd ./pkg && yarn build",
+    "build-lib": "cd ./pkg && yarn && yarn build",
     "build": "yarn build-lib && yarn build-vite"
   },
   "dependencies": {
