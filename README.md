@@ -60,7 +60,7 @@ import { ConnectLines, ConnectElement } from 'react-connect-lines'
 const ELEMENTS: ConnectElement[] = [
   {id: 'id-1', connectWith: [{id: 'id-2'}]},
   {id: 'id-2', connectWith: [{id: 'id-3'}]},
-  {id: 'id-3', connectWith: [{id: 'id-3'}]},
+  {id: 'id-3', connectWith: [{id: 'id-1'}]},
 ]
 
 export function MyApp() {
@@ -90,7 +90,7 @@ export function MyApp() {
     () => [
       {id: 'id-1', element: el1, connectWith: [{id: 'id-2'}]},
       {id: 'id-2', element: el2, connectWith: [{id: 'id-3'}]},
-      {id: 'id-3', element: el3, connectWith: [{id: 'id-3'}]},
+      {id: 'id-3', element: el3, connectWith: [{id: 'id-1'}]},
     ],
     [el1, el2, el3]
   )
