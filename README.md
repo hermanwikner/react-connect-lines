@@ -19,8 +19,8 @@ The `Connect` component accepts two props:
     - `edge?: "bezier" | "step"` – the curve of the line (`bezier` is default)
     - `color?: string` – the color of the line (`magenta` is default)
 
-### Example
-```js
+#### Example
+```jsx
 import { ConnectProvider, Connect } from 'react-connect-lines'
 
 export function MyApp() {
@@ -47,3 +47,64 @@ export function MyApp() {
   );
 }
 ```
+
+### Alternative usage
+
+It is possible to skip the `ConnectProvider` and the `Connect` component - and only use the `ConnectLines` component.
+
+#### With DOM id:s
+
+```jsx
+import { ConnectLines, ConnectElement } from 'react-connect-lines'
+
+const ELEMENTS: ConnectElement[] = [
+  {id: 'id-1', connectWith: [{id: 'id-2'}]},
+  {id: 'id-2', connectWith: [{id: 'id-3'}]},
+  {id: 'id-3', connectWith: [{id: 'id-3'}]},
+]
+
+export function MyApp() {
+  return (
+    <div>
+      <MyElement id="id-1" />
+      <MyElement id="id-2" />
+      <MyElement id="id-3" />
+
+      <ConnectLines elements={ELEMENTS} />
+    </div>
+  )
+}
+```
+
+#### With elements
+
+```jsx
+import { ConnectLines, ConnectElement } from 'react-connect-lines'
+
+export function MyApp() {
+  const [el1, setEl1] = useState<HTMLElement | null>(null)
+  const [el2, setEl2] = useState<HTMLElement | null>(null)
+  const [el3, setEl3] = useState<HTMLElement | null>(null)
+
+  const elements: ConnectElement[] = useMemo(
+    () => [
+      {id: 'id-1', element: el1, connectWith: [{id: 'id-2'}]},
+      {id: 'id-2', element: el2, connectWith: [{id: 'id-3'}]},
+      {id: 'id-3', element: el3, connectWith: [{id: 'id-3'}]},
+    ],
+    [el1, el2, el3]
+  )
+
+  return (
+    <div>
+      <MyElement ref={setEl1} />
+      <MyElement ref={setEl2} />
+      <MyElement ref={setEl3} />
+
+      <ConnectLines elements={elements} />
+    </div>
+  )
+}
+
+```
+
