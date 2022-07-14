@@ -85,9 +85,9 @@ export function MyApp() {
 import {ConnectLines, ConnectElement} from 'react-connect-lines'
 
 export function MyApp() {
-  const [el1, setEl1] = (useState < HTMLElement) | (null > null)
-  const [el2, setEl2] = (useState < HTMLElement) | (null > null)
-  const [el3, setEl3] = (useState < HTMLElement) | (null > null)
+  const [el1, setEl1] = useState<HTMLElement | null>(null)
+  const [el2, setEl2] = useState<HTMLElement | null>(null)
+  const [el3, setEl3] = useState<HTMLElement | null>(null)
 
   const elements: ConnectElement[] = useMemo(
     () => [
