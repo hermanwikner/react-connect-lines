@@ -249,8 +249,7 @@ export function WithContext() {
                                                 radius={2}
                                                 style={{height: 25}}
                                                 defaultValue={
-                                                  c.connectWith?.find((y) => y.id === x.id)
-                                                    ?.color || '#FF00FF'
+                                                  c.connectWith?.find((y) => y.id === x.id)?.color
                                                 }
                                                 onChange={(e: any) =>
                                                   handleUpdate(c, x, {

@@ -13,7 +13,7 @@ const SVG_STYLE: React.CSSProperties = {
   height: '100%',
 }
 
-const DEFAULT_COLOR = 'magenta'
+const DEFAULT_COLOR = '#000000'
 const EMPTY_ARRAY: [] = []
 
 type PointsData = (

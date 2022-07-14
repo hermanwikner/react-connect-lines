@@ -1,7 +1,7 @@
 <img width="955" alt="Screenshot 2022-07-04 at 18 35 43" src="https://user-images.githubusercontent.com/15094168/177193245-df61cce5-c07e-443b-bd10-aa746ac19322.png">
 
-
 ## React connect lines
+
 This library lets you draw lines between elements ([demo](https://react-connect-lines.vercel.app)).
 
 ### Installation
@@ -9,19 +9,22 @@ This library lets you draw lines between elements ([demo](https://react-connect-
 `yarn add react-connect-lines` or `npm i react-connect-lines`
 
 ### Usage
-First, wrap your app with the `ConnectProvider`. Then, wrap the elements you want to connect with the `Connect` component. 
+
+First, wrap your app with the `ConnectProvider`. Then, wrap the elements you want to connect with the `Connect` component.
 
 The `Connect` component accepts two props:
+
 1. `id` – unqiue identifier to use when connecting elements
 2. `connectWith` – an array of objects which configures connections and their appearance. The available configurations are:
-    - `id: string` – the element to connect with
-    - `stroke?: "dashed" | "solid"` – the look of the line (`solid` is default)
-    - `edge?: "bezier" | "step"` – the curve of the line (`bezier` is default)
-    - `color?: string` – the color of the line (`magenta` is default)
+   - `id: string` – the element to connect with
+   - `stroke?: "dashed" | "solid"` – the look of the line (`solid` is default)
+   - `edge?: "bezier" | "step"` – the curve of the line (`bezier` is default)
+   - `color?: string` – the color of the line (`#000000` is default)
 
 #### Example
+
 ```jsx
-import { ConnectProvider, Connect } from 'react-connect-lines'
+import {ConnectProvider, Connect} from 'react-connect-lines'
 
 export function MyApp() {
   return (
@@ -29,8 +32,8 @@ export function MyApp() {
       <Connect
         id="element-1"
         connectWith={[
-          { id: "element-2", color: "red", stroke: "dashed" },
-          { id: "element-3", edge: "step" },
+          {id: 'element-2', color: 'red', stroke: 'dashed'},
+          {id: 'element-3', edge: 'step'},
         ]}
       >
         <MyElement1 />
@@ -44,7 +47,7 @@ export function MyApp() {
         <MyElement3 />
       </Connect>
     </ConnectProvider>
-  );
+  )
 }
 ```
 
@@ -55,7 +58,7 @@ It is possible to skip the `ConnectProvider` and the `Connect` component - and o
 #### With DOM id:s
 
 ```jsx
-import { ConnectLines, ConnectElement } from 'react-connect-lines'
+import {ConnectLines, ConnectElement} from 'react-connect-lines'
 
 const ELEMENTS: ConnectElement[] = [
   {id: 'id-1', connectWith: [{id: 'id-2'}]},
@@ -79,12 +82,12 @@ export function MyApp() {
 #### With elements
 
 ```jsx
-import { ConnectLines, ConnectElement } from 'react-connect-lines'
+import {ConnectLines, ConnectElement} from 'react-connect-lines'
 
 export function MyApp() {
-  const [el1, setEl1] = useState<HTMLElement | null>(null)
-  const [el2, setEl2] = useState<HTMLElement | null>(null)
-  const [el3, setEl3] = useState<HTMLElement | null>(null)
+  const [el1, setEl1] = (useState < HTMLElement) | (null > null)
+  const [el2, setEl2] = (useState < HTMLElement) | (null > null)
+  const [el3, setEl3] = (useState < HTMLElement) | (null > null)
 
   const elements: ConnectElement[] = useMemo(
     () => [
@@ -105,6 +108,4 @@ export function MyApp() {
     </div>
   )
 }
-
 ```
-
