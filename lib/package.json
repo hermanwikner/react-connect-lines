@@ -1,6 +1,6 @@
 {
   "name": "react-connect-lines",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Connect elements with lines",
   "scripts": {
     "build": "parcel build --no-cache",
@@ -11,7 +11,7 @@
     ".": {
       "require": "./dist/cjs/index.js",
       "default": "./dist/esm/index.js",
-      "types": "./dist/types/index.d.ts" 
+      "types": "./dist/types/index.d.ts"
     }
   },
   "source": "./index.ts",
