@@ -27,6 +27,7 @@ export function getGroupedConnections(props: GetGroupedConnectionsProps) {
             color: connectWith?.find((a) => a.id === x.id)?.color || '#000000',
             edge: connectWith?.find((a) => a.id === x.id)?.edge || 'bezier',
             stroke: connectWith?.find((a) => a.id === x.id)?.stroke || 'solid',
+            hasArrows: Boolean(connectWith?.find((a) => a.id === x.id)?.hasArrows),
             // connectionsLen: connectionsLen,
           }
         })

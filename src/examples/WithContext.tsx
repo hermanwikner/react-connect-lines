@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Card,
+  Checkbox,
   Flex,
   Grid,
   Label,
@@ -213,6 +214,31 @@ export function WithContext() {
                                                 <option value="solid">Solid</option>
                                               </Select>
                                             </Stack>
+
+                                            {connected && (
+                                              <Stack space={2}>
+                                                <Label size={0} muted>
+                                                  Has Arrows
+                                                </Label>
+
+                                                <Box style={{height: 25}}>
+                                                  <Checkbox
+                                                    onChange={(e) => {
+                                                      return handleUpdate(c, x, {
+                                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                        // @ts-ignore
+                                                        hasArrows: e.target?.checked,
+                                                      })
+                                                    }}
+                                                    defaultChecked={
+                                                      connected &&
+                                                      c.connectWith?.find((y) => y.id === x.id)
+                                                        ?.hasArrows
+                                                    }
+                                                  />
+                                                </Box>
+                                              </Stack>
+                                            )}
 
                                             <Stack space={2}>
                                               <Label size={0} muted>

@@ -23,6 +23,7 @@ type PointsData = (
       edge: Edge
       stroke: Stroke
       d: string
+      hasArrows: boolean
     }
   | undefined
 )[]
@@ -67,7 +68,8 @@ export function ConnectLines(props: ConnectLinesProps) {
        *       rect: DOMRect,
        *       color: string,
        *       edge: string,
-       *       stroke: string
+       *       stroke: string,
+       *       hasArrows: boolean
        *    }[]
        *  }
        */
@@ -207,6 +209,18 @@ export function ConnectLines(props: ConnectLinesProps) {
               <path d="M 0 0 L 10 5 L 0 10 z" fill={c} />
               {/* <circle cx="5" cy="5" r="5" fill={c} /> */}
             </marker>
+            <marker
+              id={`line-${c}`}
+              markerHeight="5"
+              markerUnits="strokeWidth"
+              markerWidth="10"
+              orient="auto"
+              refX="0"
+              refY="5"
+              viewBox="0 0 10 10"
+            >
+              <path d="M 0 5 L 10 5" stroke={c} strokeWidth="2" fill="none" />
+            </marker>
           </defs>
         ))}
 
@@ -217,11 +231,11 @@ export function ConnectLines(props: ConnectLinesProps) {
               d={p?.d}
               fill="none"
               key={p?.d}
-              markerEnd={`url(#triangle-${p?.color})`}
               stroke={p?.color}
               strokeWidth="2"
               strokeDasharray={p?.stroke === 'dashed' ? 4 : 0}
               strokeLinejoin="round"
+              markerEnd={`url(#${p?.hasArrows ? `triangle` : `line`}-${p?.color})`}
             />
           )
         })}

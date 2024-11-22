@@ -17,9 +17,10 @@ The `Connect` component accepts two props:
 1. `id` – unqiue identifier to use when connecting elements
 2. `connectWith` – an array of objects which configures connections and their appearance. The available configurations are:
    - `id: string` – the element to connect with
-   - `stroke?: "dashed" | "solid"` – the look of the line (`solid` is default)
-   - `edge?: "bezier" | "step"` – the curve of the line (`bezier` is default)
    - `color?: string` – the color of the line (`#000000` is default)
+   - `edge?: "bezier" | "step"` – the curve of the line (`bezier` is default)
+   - `hasArrows?: boolean` – the triangles at the end of the line (`true` is default)
+   - `stroke?: "dashed" | "solid"` – the look of the line (`solid` is default)
 
 #### Example
 

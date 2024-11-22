@@ -6,6 +6,7 @@ export interface ConnectWithProps {
   edge?: Edge
   stroke?: Stroke
   id: string
+  hasArrows?: boolean
 }
 
 export interface ConnectElement {

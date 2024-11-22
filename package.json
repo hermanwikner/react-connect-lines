@@ -14,8 +14,8 @@
     "framer-motion": "^6.3.3",
     "lodash": "^4.17.21",
     "nanoid": "^4.0.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "styled-components": "^5.3.5"
   },
   "resolutions": {
@@ -38,6 +38,6 @@
     "eslint-plugin-react-hooks": "^4.5.0",
     "prettier": "^2.6.2",
     "typescript": "^4.4.4",
-    "vite": "^2.7.2"
+    "vite": "^5.4.11"
   }
 }
